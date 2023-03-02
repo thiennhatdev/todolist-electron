@@ -1,0 +1,11 @@
+.add-work input,
+.add-work textarea,
+.add-work select {
+    width: 70%;
+}
+
+.wrap-input-field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}

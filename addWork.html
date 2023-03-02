@@ -1,0 +1,68 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/add-work.css">
+</head>
+<body>
+  <div class="add-work container my-5">
+    <h3 class='add-work__title text-center mb-4'>Thêm công việc</h3>
+    <form>
+        <div class='title-field wrap-input-field'>
+            <label>Tên văn bản :</label>
+            <input placeholder='' class='input-title form-control'/>
+        </div>
+        <div class='content-field wrap-input-field'>
+          <label>Nội dung :</label>
+          <textarea placeholder='' class='input-content form-control' rows="5"></textarea>
+        </div>
+        <div class='secure-field wrap-input-field'>
+          <label>Độ mật :</label>
+          <select class='select-secure form-control'>
+            <option value="NORMAL">Hành chính</option>
+            <option value="SECURE">Mật</option>
+          </select>
+        </div>
+        <div class='send-place-field wrap-input-field'>
+          <label>Nơi gửi :</label>
+          <input placeholder='Nơi gửi' class='input-send-place form-control'/>
+        </div>
+        <div class='receive-date-field wrap-input-field'>
+          <label>Ngày nhận :</label>
+          <input type='date' class='form-control input-receive-date' />
+        </div>
+        <div class='require-field wrap-input-field'>
+          <label>Yêu cầu của văn bản :</label>
+          <textarea placeholder='Yêu cầu của văn bản' class='input-require form-control' rows="5"></textarea>
+        </div>
+        <div class='expired-date-field wrap-input-field'>
+          <label>Ngày hết hạn :</label>
+          <input type='date' class='form-control input-expired-date' />
+        </div>
+        <div class='progress-field wrap-input-field'>
+          <label>Phê duyệt của lãnh đạo :</label>
+          <select class='form-control select-approve'>
+            <option value="MOVE1">Chuyển đội 1</option>
+            <option value="MOVE2">Chuyển đội 2</option>
+            <option value="MOVE3">Chuyển đội 3</option>
+          </select>
+        </div>
+        <div class='progress-field wrap-input-field'>
+          <label>Tiến độ thực hiện :</label>
+          <select class='form-control select-progress'>
+            <option value="PENDING">Đang thực hiện</option>
+            <option value="NOT">Chưa thực hiện</option>
+            <option value="FINISHED">Đã hoàn thành</option>
+          </select>
+        </div>
+        <div class='search-keyword-field wrap-input-field'>
+          <label>Từ khoá tìm kiếm :</label>
+          <input placeholder='Từ khoá' class='input-search-keyword form-control'/>
+        </div>
+        <button class='btn-add-work btn btn-primary ml-auto d-block'>Thêm</button>
+    </form>
+</div>
+<script src="js/addWork.js">   </script>
+</body>
+</html>

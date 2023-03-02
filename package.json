@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "ajv": "^6.12.2",
+    "electron-reload": "^2.0.0-alpha.1",
     "nedb-promises": "^4.0.3"
   }
 }

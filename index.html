@@ -3,20 +3,54 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Todolist</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
   </head>
   <body>
-    <div id="myDIV" class="header">
-      <h2 style="margin:5px">My To Do List</h2>
-      <input type="text" id="myInput" placeholder="Title...">
-      <button id="addBtn">Add</button>
+    <div class='jumbotron mb-0'>
+      <h1 class='text-center mb-5'>My to do list</h1>
+      <div class='d-flex justify-content-between'>
+        <div>
+          <button id="btn-add" class='btn btn-primary'>Thêm mới</button>
+        </div>
+        <div class='d-flex'> 
+          <input type='text' class='form-control mr-2 min-w-300' id="work-find-input" placeholder="Tìm theo tên, nội dung hoặc từ khoá ..." />
+        </div>
+      </div>
+
+      <hr />
+      
+      <div class="work-list">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Stt</th>
+              <th scope="col" class='min-w-300'>Tên văn bản</th>
+              <th scope="col">Độ mật</th>
+              <th scope="col">Nơi gửi</th>
+              <th scope="col">Ngày nhận</th>
+              <th scope="col" class='min-w-300'>Nội dung văn bản</th>
+              <th scope="col">Yêu cầu của văn bản</th>
+              <th scope="col">Ngày hết hạn</th>
+              <th scope="col">Phê duyệt của lãnh đạo</th>
+              <th scope="col">Tiến độ thực hiện</th>
+              <th scope="col">Từ khoá tìm kiếm</th>
+            </tr>
+          </thead>
+          <tbody class='tbody'>
+          </tbody>
+        </table>
+        <ul id="todolist">
+        </ul>
+      </div>
+      <div class="wrap-pagination d-flex justify-content-end mt-5"></div>
     </div>
-    <ul id="todolist">
-    </ul>
     <!-- You can also require other files to run in this process -->
+    
+    <!-- <script src="./preload.js"></script> -->
     <script src="./renderer.js"></script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 const Datastore = require('nedb-promises');
 const Ajv = require('ajv');
 const todoItemSchema = require('../schemas/todoItem');
+const { LIMIT } = require('../../utils/contants');
 
 class TodoItemStore {
     constructor() {
@@ -32,16 +33,40 @@ class TodoItemStore {
         return this.db.findOne({_id}).exec()
     }
 
-    readAll() {
-        return this.db.find()
+    readAll(text, page, limit = LIMIT) {
+        return this.db.find({ $or: [
+                    {
+                        title: { $regex: new RegExp(`${text}`) }
+                    },
+                    {
+                        content: { $regex: new RegExp(`${text}`) }
+                    },
+                    {
+                        searchKeyword: { $regex: new RegExp(`${text}`) }
+                    }
+                ]})
+                .skip(page * limit - limit)
+                .limit(limit);
     }
 
     readActive() {
         return this.db.find({isDone: false}).exec();
     }
 
-    archive(_id) {
-        return this.db.update({_id}, {$set: {isDone: true}})
+    archive(_id, data) {
+        return this.db.update({_id}, {$set: data})
+    }
+
+    filter(text) {
+        return this.db.find({ content: { $regex: new RegExp(`${text}`) } }).skip(3).limit(3)
+    }
+
+    totalRecord(text) {
+        return this.db.count({ content: { $regex: new RegExp(`${text}`) } }).then(res => res);
+    }
+
+    delete(_id) {
+        return this.db.remove({_id});
     }
 }
 

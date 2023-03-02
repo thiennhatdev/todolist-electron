@@ -1,19 +1,63 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
-const path = require('path')
+const {app, ipcMain, ipcRenderer, BrowserWindow} = require('electron');
+const path = require('path');
+const url = require('url');
 const db = require('./db/stores/todoItem');
 
-global.db = db;
+require('electron-reload')(__dirname, {
+  electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+});
 
-function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
+global.db = db;
+let mainWindow;
+let addWindow;
+
+function openAddWindow(arg) {
+
+  addWindow = new BrowserWindow({
+    // parent: mainWindow,
+    modal: true,
+    show: false,
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false
     }
   })
+  addWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'addWork.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  // addWindow.setMenu(null)
+
+  addWindow.once('ready-to-show', () => {
+    addWindow.show()
+    addWindow.webContents.send('item-work', arg);
+  })
+
+  addWindow.on('close', () => {
+    addWindow = null;
+  })
+}
+
+function createWindow () {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    width: 1400,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname  , 'preload.js'),
+      nodeIntegration: true,
+            contextIsolation: false,
+      //       enableRemoteModule: true,
+    }
+  })
+
+  ipcMain.on('data-from-edit', (event, arg) => {
+      openAddWindow(arg);
+  });
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
@@ -25,13 +69,16 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow();
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
+  localStorage.removeItem('currentPage')
 })
 
 app.on('activate', function () {
