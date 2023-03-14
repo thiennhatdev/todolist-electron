@@ -4,7 +4,9 @@
   "description": "A minimal todo list Electron application building on nedb",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": "https://github.com/ctxhou/electron-nedb-todolist",
   "keywords": [
@@ -15,11 +17,16 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^8.2.5"
+    "electron": "^8.2.5",
+    "electron-builder": "^23.6.0",
+    "electron-packager": "^17.1.1"
   },
   "dependencies": {
     "ajv": "^6.12.2",
+    "bootstrap-datepicker": "^1.9.0",
+    "dotenv": "^16.0.3",
     "electron-reload": "^2.0.0-alpha.1",
+    "jquery": "^3.6.4",
     "nedb-promises": "^4.0.3"
   }
 }

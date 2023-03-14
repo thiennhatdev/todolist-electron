@@ -17,14 +17,17 @@
           <button id="btn-add" class='btn btn-primary'>Thêm mới</button>
         </div>
         <div class='d-flex'> 
-          <input type='text' class='form-control mr-2 min-w-300' id="work-find-input" placeholder="Tìm theo tên, nội dung hoặc từ khoá ..." />
+          <select name='findName' class='form-control filter-secure mr-2'></select>
+          <input name='secure' type='text' class='form-control filter-send-place mr-2' placeholder="Nơi gửi" />
+          <input name='sendPlace' type='text' class='form-control mr-2 min-w-300' id="work-find-input" placeholder="Tìm theo tên, nội dung hoặc từ khoá ..." />
+          <!-- <input name='receiveDate' type="date" class='form-control filter-receive-date mr-2' /> -->
         </div>
       </div>
 
       <hr />
       
       <div class="work-list">
-        <table class="table">
+        <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">Stt</th>
@@ -34,10 +37,11 @@
               <th scope="col">Ngày nhận</th>
               <th scope="col" class='min-w-300'>Nội dung văn bản</th>
               <th scope="col">Yêu cầu của văn bản</th>
-              <th scope="col">Ngày hết hạn</th>
+              <th scope="col">Nhắc nhở</th>
               <th scope="col">Phê duyệt của lãnh đạo</th>
               <th scope="col">Tiến độ thực hiện</th>
               <th scope="col">Từ khoá tìm kiếm</th>
+              <th scope="col">Quản lý</th>
             </tr>
           </thead>
           <tbody class='tbody'>
@@ -50,7 +54,7 @@
     </div>
     <!-- You can also require other files to run in this process -->
     
-    <!-- <script src="./preload.js"></script> -->
+    <script src="utils/contants.js"></script>
     <script src="./renderer.js"></script>
   </body>
 </html>

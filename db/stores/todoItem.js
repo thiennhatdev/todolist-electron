@@ -1,7 +1,11 @@
 const Datastore = require('nedb-promises');
+const electron = require('electron');
 const Ajv = require('ajv');
 const todoItemSchema = require('../schemas/todoItem');
-const { LIMIT } = require('../../utils/contants');
+const { LIMIT } = require('./variables.js');
+const app = electron.app;
+const userData = app.getAppPath('userData');
+const path = require("path");
 
 class TodoItemStore {
     constructor() {
@@ -11,10 +15,14 @@ class TodoItemStore {
         });
 
         this.schemaValidator = ajv.compile(todoItemSchema);
-        const dbPath = `${process.cwd()}/todolist.db`;
+        // const dbPath = `${process.cwd()}/todolist.db`;
+        // const dbPath = `${userData}/todolist.db`;
+        // const dbPath = path.join(userData, 'todolist.db');
+        const dbPath = path.join(app.getAppPath(), 'app', 'db', 'todolist.db');
         this.db = Datastore.create({
             filename: dbPath,
             timestampData: true,
+            autoLoad: true
         });
     }
 
@@ -33,18 +41,22 @@ class TodoItemStore {
         return this.db.findOne({_id}).exec()
     }
 
-    readAll(text, page, limit = LIMIT) {
+    readAll(objFilter, page, limit = LIMIT) {
+        const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
         return this.db.find({ $or: [
                     {
-                        title: { $regex: new RegExp(`${text}`) }
+                        title: { $regex: new RegExp(`${findName}`) }
                     },
                     {
-                        content: { $regex: new RegExp(`${text}`) }
+                        content: { $regex: new RegExp(`${findName}`) }
                     },
                     {
-                        searchKeyword: { $regex: new RegExp(`${text}`) }
-                    }
-                ]})
+                        searchKeyword: { $regex: new RegExp(`${findName}`) }
+                    },
+                ],       
+                secure: { $regex: new RegExp(`${secure}`) },
+                sendPlace: { $regex: new RegExp(`${sendPlace}`) },
+            })
                 .skip(page * limit - limit)
                 .limit(limit);
     }
@@ -57,16 +69,37 @@ class TodoItemStore {
         return this.db.update({_id}, {$set: data})
     }
 
-    filter(text) {
-        return this.db.find({ content: { $regex: new RegExp(`${text}`) } }).skip(3).limit(3)
-    }
-
-    totalRecord(text) {
-        return this.db.count({ content: { $regex: new RegExp(`${text}`) } }).then(res => res);
+    totalRecord(objFilter) {
+        const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
+        return this.db.count({ $or: [
+            {
+                title: { $regex: new RegExp(`${findName}`) }
+            },
+            {
+                content: { $regex: new RegExp(`${findName}`) }
+            },
+            {
+                searchKeyword: { $regex: new RegExp(`${findName}`) }
+            }
+        ],
+        secure: { $regex: new RegExp(`${secure}`) },
+        sendPlace: { $regex: new RegExp(`${sendPlace}`) },
+        });
     }
 
     delete(_id) {
         return this.db.remove({_id});
+    }
+
+    remind(dateList) {
+        const query = dateList.map(item => ({
+            "remind.time": item
+        }))
+        return this.db.find(
+            {        
+                $or: query
+            }
+        )
     }
 }
 

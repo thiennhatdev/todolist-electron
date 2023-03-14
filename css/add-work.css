@@ -9,3 +9,16 @@
     justify-content: space-between;
     margin-bottom: 30px;
 }
+
+.wrap-add-notification {
+    width: 70%;
+}
+
+.input-title-notification {
+    width: 60%;
+}
+
+.input-date-notification {
+    width: 40% !important;
+    margin-left: 20px;
+}

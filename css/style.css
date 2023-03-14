@@ -19,6 +19,10 @@ ul {
   max-height: 50vh;
 }
 
+.work-list tbody tr {
+  cursor: pointer;
+}
+
 th {
   white-space: nowrap;
 }
