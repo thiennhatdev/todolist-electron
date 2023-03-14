@@ -3,66 +3,85 @@
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="css/add-work.css">
 </head>
 <body>
   <div class="add-work container my-5">
     <h3 class='add-work__title text-center mb-4'>Thêm công việc</h3>
-    <form>
+    <form id='add-form'>
+        <div class='content-field wrap-input-field'>
+          <label>Chọn file :<sup class='text-danger'>(Yêu cầu)</sup></label>
+          <input type='file' placeholder='' class='input-file form-control' />
+        </div>
         <div class='title-field wrap-input-field'>
-            <label>Tên văn bản :</label>
-            <input placeholder='' class='input-title form-control'/>
+            <label>Tên văn bản :<sup class='text-danger'>(Yêu cầu)</sup></label>
+            <input placeholder='' name='email' type='text' class='input-title form-control' required
+            data-pristine-required-message="Email không được để trống!"
+            data-pristine-pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+            data-pristine-pattern-message="Không đúng định dạng email!"/>
         </div>
         <div class='content-field wrap-input-field'>
-          <label>Nội dung :</label>
+          <label>Nội dung :<sup class='text-danger'>(Yêu cầu)</sup></label>
           <textarea placeholder='' class='input-content form-control' rows="5"></textarea>
         </div>
         <div class='secure-field wrap-input-field'>
-          <label>Độ mật :</label>
+          <label>Độ mật :<sup class='text-danger'>(Yêu cầu)</sup></label>
           <select class='select-secure form-control'>
-            <option value="NORMAL">Hành chính</option>
-            <option value="SECURE">Mật</option>
+            <!-- <option value="NORMAL">Hành chính</option>
+            <option value="SECURE">Mật</option> -->
           </select>
         </div>
         <div class='send-place-field wrap-input-field'>
-          <label>Nơi gửi :</label>
+          <label>Nơi gửi :<sup class='text-danger'>(Yêu cầu)</sup></label>
           <input placeholder='Nơi gửi' class='input-send-place form-control'/>
         </div>
         <div class='receive-date-field wrap-input-field'>
-          <label>Ngày nhận :</label>
-          <input type='date' class='form-control input-receive-date' />
+          <label>Ngày nhận :<sup class='text-danger'>(Yêu cầu)</sup></label>
+          <!-- <input type='date' format="DD/MM/YYYY" class='form-control input-receive-date' /> -->
+          <input type="text" class="form-control datepicker input-receive-date" placeholder="Chọn ngày" autocomplete="off" autofill="off">
         </div>
         <div class='require-field wrap-input-field'>
           <label>Yêu cầu của văn bản :</label>
           <textarea placeholder='Yêu cầu của văn bản' class='input-require form-control' rows="5"></textarea>
         </div>
         <div class='expired-date-field wrap-input-field'>
-          <label>Ngày hết hạn :</label>
-          <input type='date' class='form-control input-expired-date' />
+          <div>
+            <label class='d-block'>Nhắc nhở :</label>
+            <small class='text-info'>(Sẽ được thông báo trước 2 ngày)</small>
+          </div>
+          <div class='wrap-add-notification'>
+            <div class='form-add-notification'>
+              <div class='d-flex item-add-notification'>
+                <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
+          <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+
+                <!-- <input name="date-notification" type='date' class='form-control input-date-notification' /> -->
+              </div>
+            </div>
+            <div>
+              <button class='btn btn-success btn-sm mt-2 btn-add-notification' type='button'>Thêm</button>
+            </div>
+          </div>
         </div>
         <div class='progress-field wrap-input-field'>
           <label>Phê duyệt của lãnh đạo :</label>
-          <select class='form-control select-approve'>
-            <option value="MOVE1">Chuyển đội 1</option>
-            <option value="MOVE2">Chuyển đội 2</option>
-            <option value="MOVE3">Chuyển đội 3</option>
-          </select>
+          <input placeholder='Phê duyệt' class='input-approve form-control'/>
         </div>
         <div class='progress-field wrap-input-field'>
           <label>Tiến độ thực hiện :</label>
           <select class='form-control select-progress'>
-            <option value="PENDING">Đang thực hiện</option>
-            <option value="NOT">Chưa thực hiện</option>
-            <option value="FINISHED">Đã hoàn thành</option>
           </select>
         </div>
         <div class='search-keyword-field wrap-input-field'>
           <label>Từ khoá tìm kiếm :</label>
-          <input placeholder='Từ khoá' class='input-search-keyword form-control'/>
+          <textarea placeholder='Từ khoá' class='input-search-keyword form-control' rows="5"></textarea>
         </div>
-        <button class='btn-add-work btn btn-primary ml-auto d-block'>Thêm</button>
+        <button class='btn-add-work btn btn-primary ml-auto d-block' type='button'>Thêm</button>
     </form>
 </div>
-<script src="js/addWork.js">   </script>
+<script src="js/addWork.js"></script>
+<script src="utils/contants.js"></script>
+<script src="js/validate-lib.js"></script>
 </body>
 </html>

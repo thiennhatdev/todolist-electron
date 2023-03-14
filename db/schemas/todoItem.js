@@ -1,6 +1,9 @@
 const todoItemSchema = {
     type: 'object',
     properties: {
+      filePath: {
+        type: 'object',
+      },
       title: {
         type: 'string',
       },
@@ -19,8 +22,8 @@ const todoItemSchema = {
       require: {
         type: 'string',
       },
-      expiredDate: {
-        type: 'string',
+      remind: {
+        type: 'array',
       },
       approve: {
         type: 'string',

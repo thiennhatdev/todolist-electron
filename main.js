@@ -1,12 +1,18 @@
 // Modules to control application life and create native browser window
-const {app, ipcMain, ipcRenderer, BrowserWindow} = require('electron');
+const {app, ipcMain, ipcRenderer, BrowserWindow, Notification} = require('electron');
 const path = require('path');
 const url = require('url');
 const db = require('./db/stores/todoItem');
+require('dotenv').config();
 
-require('electron-reload')(__dirname, {
-  electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
-});
+const isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
+
+console.log(isDev, 'isDev')
+if (isDev) {
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+  });
+}
 
 global.db = db;
 let mainWindow;
@@ -18,8 +24,8 @@ function openAddWindow(arg) {
     // parent: mainWindow,
     modal: true,
     show: false,
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -45,8 +51,8 @@ function openAddWindow(arg) {
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1400,
-    height: 800,
+    width: 1900,
+    height: 1000,
     webPreferences: {
       preload: path.join(__dirname  , 'preload.js'),
       nodeIntegration: true,
@@ -71,6 +77,15 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
+  
+  mainWindow.webContents
+  .executeJavaScript(`
+    localStorage.removeItem('isSentNotifi'); 
+    localStorage.removeItem('currentPage')
+    `, true)
+  .then(localStorage => {
+    console.log(localStorage);
+  });
 })
 
 // Quit when all windows are closed.
@@ -78,7 +93,7 @@ app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
-  localStorage.removeItem('currentPage')
+  
 })
 
 app.on('activate', function () {

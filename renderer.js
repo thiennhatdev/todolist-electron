@@ -1,59 +1,102 @@
 const { remote, ipcRenderer } = require('electron');
-const url = require('url');
-const path = require('path');
-const { LIMIT } = require('./utils/contants');
+const Notification = remote.Notification;
 
 const dbInstance = remote.getGlobal('db');
 
 const BrowserWindow = remote.BrowserWindow;
 
+const secureField = document.querySelector('.filter-secure');;
+
+const findInput = 
+document.querySelector('#work-find-input');
+const secureInput = document.querySelector('.filter-secure');
+const sendPlaceInput = document.querySelector('.filter-send-place');
+
+let objFilter = {
+    findName: '',
+    secure: '',
+    sendPlace: '',
+}
+
+secureField.innerHTML = `
+    <option disabled selected value="">Mức độ mật</option>
+    ${Object.values(MUC_DO_MAT).map(item => (
+        `<option value=${item.value}>${item.label}</option>`
+    ))}
+`
+
 function createTodoItemView(item) {
-    const { stt, title, content, secure, sendPlace, receiveDate, require, expiredDate, approve, progress, searchKeyword } = item;
+    const { _id, stt, filePath, title, content, secure, sendPlace, receiveDate, require, remind, approve, progress, searchKeyword } = item;
     const trNode = document.createElement('tr');
+    trNode.onclick = () => {
+        openFileInFolder(filePath?.path);
+    }
 
     trNode.innerHTML = 
     `
         <th scope="row"><span>${stt}</th>
         <td><span>${title}</span></td>
-        <td><span>${secure}</span></td>
+        <td><span class='text-nowrap ${MUC_DO_MAT[`${secure}`]?.style}'>${MUC_DO_MAT[`${secure}`]?.label}</span></td>
         <td><span>${sendPlace}</span></td>
-        <td><span>${receiveDate}</span></td>
+        <td><span class='text-nowrap'>${receiveDate}</span></td>
         <td><span>${content}</span></td>
-        <td><span>${require}</span></td>
-        <td><span>${expiredDate}</span></td>
+        <td><span>${require || '-'}</span></td>
+        <td>
+            ${
+                remind 
+                    ? remind.map(item => {
+                        return (
+                            `<span class='text-nowrap'>${item.time}</span>`
+                        )
+                    }).join("")
+                    : '-'
+            }
+        </td>
         <td><span>${approve}</span></td>
-        <td><span>${progress}</span></td>
-        <td><span>${searchKeyword}</span></td>
+        <td><span class='${QUA_TRINH[progress]?.style}'>${QUA_TRINH[progress]?.label || '-'}</span></td>
+        <td><span>${searchKeyword || '-'}</span></td>
+        <td>
+            <div class='d-flex'>
+                <button 
+                    class='btn btn-info mr-2' 
+                    onclick="updateWork(${JSON.stringify(item).split('"').join("&quot;")}, event)"
+                >Sửa</button>
+                <button 
+                    onclick='removeItem("${_id}", event)'
+                    class='btn btn-danger'
+                >Xoá</button>
+            </div>
+        </td>
     `
-
-    // trNode.innerHTML = 
-    //     `<span>${content}</span>
-    //     <div class='d-flex'>
-    //         <span onclick="updateWork(${JSON.stringify(item).split('"').join("&quot;")})">${'\&#9999;'}</span>
-    //         <span class='close' onclick='removeItem("${_id}", event)'>${'\u00D7'}</span>
-    //     </div>
-    //     `;
     return trNode;
 }
 
 function removeItem(_id, event) {
+    event.stopPropagation();
     dbInstance.delete(_id)
         .then(result => {
-            updateView();
+            updateView(objFilter);
         })
 }
 
-function updateWork(item) {
+function updateWork(item, event) {
+    event.stopPropagation();
     ipcRenderer.send('data-from-edit', item)
 }
 
 function navigate(page, event) {
     localStorage.setItem('currentPage', page)
-    const sortText = document.getElementById('work-find-input').value;
-    updateView(sortText, page);   
+    updateView(objFilter, page);   
 }
 
-function updateView(text = "", page = 1) {
+function openFileInFolder(filePath) {
+    if (filePath) {
+        const fullPath = `file://${filePath}`
+        remote.shell.openExternal(fullPath);
+    }
+}
+
+function updateView(objFilter = {}) {
     const todolistNode = document.querySelector('.tbody');
     const pagiParent = document.querySelector(".wrap-pagination");
 
@@ -62,8 +105,7 @@ function updateView(text = "", page = 1) {
     todolistNode.innerHTML = ``;
     pagiParent.innerHTML = ``;
 
-    dbInstance.totalRecord(text).then(total => {
-        console.log(total, LIMIT, 'update view')
+    dbInstance.totalRecord(objFilter).then(total => {
         if (total > LIMIT) {
             const totalPage = Math.ceil(total / LIMIT);
             const pagiNode = document.createElement('div');
@@ -81,7 +123,7 @@ function updateView(text = "", page = 1) {
                             `<li class="page-item ${currentPage == item ? 'active' : ''}" onclick="navigate(${item}, event)">
                                 <a class="page-link" href="#">${item}</a>
                             </li>`
-                        ))
+                        )).join("")
                     }
                     <li disabled class="page-item" onclick="navigate(${currentPage < totalPage ? currentPage + 1 : currentPage}, event)"><a class="page-link" href="#">Sau</a></li>
                 </ul>
@@ -91,15 +133,48 @@ function updateView(text = "", page = 1) {
         }
     });
 
-    dbInstance.readAll(text, page)
+    dbInstance.readAll(objFilter, currentPage)
     .then(allTodolists => {
         allTodolists.forEach((item, index) => {
-            const stt = (page - 1) * LIMIT + ++index;
+            const stt = (currentPage - 1) * LIMIT + ++index;
             const trNode = createTodoItemView({...item, stt});
             todolistNode.appendChild(trNode);
         });
     })
 }
+
+function sendNotification() {
+    let today = new Date();
+    let tomorrow = new Date();
+    let afterTomorrow = new Date();
+
+    tomorrow.setDate(today.getDate()+1);
+    afterTomorrow.setDate(today.getDate()+2);
+    
+    tomorrow = tomorrow.toISOString().split('T')[0];
+    afterTomorrow = afterTomorrow.toISOString().split('T')[0];
+
+    const dateList = [tomorrow, afterTomorrow]
+    dbInstance.remind(dateList).then(data => {
+      data.forEach(item => {
+        const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
+        
+        if (!isSentNotifi) {
+          const noti = new Notification({title: "Nhắc nhở", body: item.title})
+          
+          noti.on('close', () => {
+            localStorage.setItem("isSentNotifi", true)
+          })
+
+          noti.on('click', () => {
+            localStorage.setItem("isSentNotifi", true)
+          })
+
+          noti.show();
+        }
+      })
+    })
+  }
 
 document.getElementById('btn-add').addEventListener('click', (e) => {
     ipcRenderer.send('data-from-edit', {})
@@ -117,12 +192,28 @@ const debounce = (callback, wait) => {
     };
 }
 
-const handleMouseMove = debounce((ev) => {
-    const inputValue = document.getElementById('work-find-input').value;
-    updateView(inputValue)
+const handleMouseMove = debounce((e) => {
+    localStorage.setItem('currentPage', 1)
+    let { name, value = ' ' } = e.target.value;
+    objFilter = {
+        findName: findInput.value,
+        secure: secureInput.value,
+        sendPlace: sendPlaceInput.value,
+        // receiveDate: new Date(receiveDateInput.value).toDateString(),
+    }
+    objFilter = {
+        ...objFilter,
+        [name]: value
+    }
+    updateView(objFilter)
   }, 400);
 
-document.getElementById('work-find-input').addEventListener('keyup',handleMouseMove)
+findInput.addEventListener('keyup',handleMouseMove)
+secureInput.addEventListener('change',handleMouseMove)
+sendPlaceInput.addEventListener('keyup',handleMouseMove)
+// receiveDateInput.addEventListener('change',handleMouseMove)
 
 // find document === END
-updateView();
+updateView(objFilter);
+
+sendNotification();
