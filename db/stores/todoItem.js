@@ -22,7 +22,8 @@ class TodoItemStore {
         this.db = Datastore.create({
             filename: dbPath,
             timestampData: true,
-            autoLoad: true
+            autoLoad: true,
+            corruptAlertThreshold: 1
         });
     }
 
@@ -43,17 +44,8 @@ class TodoItemStore {
 
     readAll(objFilter, page, limit = LIMIT) {
         const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
-        return this.db.find({ $or: [
-                    {
-                        title: { $regex: new RegExp(`${findName}`) }
-                    },
-                    {
-                        content: { $regex: new RegExp(`${findName}`) }
-                    },
-                    {
-                        searchKeyword: { $regex: new RegExp(`${findName}`) }
-                    },
-                ],       
+        return this.db.find({
+                filterText: { $regex: new RegExp(`${findName}`) },  
                 secure: { $regex: new RegExp(`${secure}`) },
                 sendPlace: { $regex: new RegExp(`${sendPlace}`) },
             })
@@ -71,19 +63,10 @@ class TodoItemStore {
 
     totalRecord(objFilter) {
         const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
-        return this.db.count({ $or: [
-            {
-                title: { $regex: new RegExp(`${findName}`) }
-            },
-            {
-                content: { $regex: new RegExp(`${findName}`) }
-            },
-            {
-                searchKeyword: { $regex: new RegExp(`${findName}`) }
-            }
-        ],
-        secure: { $regex: new RegExp(`${secure}`) },
-        sendPlace: { $regex: new RegExp(`${sendPlace}`) },
+        return this.db.count({ 
+            filterText: { $regex: new RegExp(`${findName}`) },
+            secure: { $regex: new RegExp(`${secure}`) },
+            sendPlace: { $regex: new RegExp(`${sendPlace}`) },
         });
     }
 

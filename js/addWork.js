@@ -147,6 +147,7 @@ ipcRenderer.on('item-work', (event, item) => {
             approve: approveField.value,
             progress: progressField.value,
             searchKeyword: searchKeywordField.value,
+            filterText: `${titleField.value.toUpperCase()} ${contentField.value.toUpperCase()} ${searchKeywordField.value.toUpperCase()}`
         }
 
         if (!pathContainFile) validateText = 'Chọn file là bắt buộc!';
