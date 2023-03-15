@@ -1,12 +1,11 @@
 const { remote, ipcRenderer } = require('electron');
+const moment = require('moment');
+
 const Notification = remote.Notification;
 
 const dbInstance = remote.getGlobal('db');
 
-const BrowserWindow = remote.BrowserWindow;
-
 const secureField = document.querySelector('.filter-secure');;
-
 const findInput = 
 document.querySelector('#work-find-input');
 const secureInput = document.querySelector('.filter-secure');
@@ -144,36 +143,35 @@ function updateView(objFilter = {}) {
 }
 
 function sendNotification() {
-    let today = new Date();
-    let tomorrow = new Date();
-    let afterTomorrow = new Date();
+    try {
+        let format = 'DD/MM/YYYY';
+        let today = new Date();
+        let tomorrow = moment(today).add('days', 1).format(format);
+        let afterTomorrow = moment(today).add('days', 2).format(format);
 
-    tomorrow.setDate(today.getDate()+1);
-    afterTomorrow.setDate(today.getDate()+2);
-    
-    tomorrow = tomorrow.toISOString().split('T')[0];
-    afterTomorrow = afterTomorrow.toISOString().split('T')[0];
+        const dateList = [tomorrow, afterTomorrow];
+        dbInstance.remind(dateList).then(data => {
+            data.forEach(item => {
+            const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
+            
+            if (!isSentNotifi) {
+            const noti = new Notification({title: "Nhắc nhở", body: item.title})
+            
+            noti.on('close', () => {
+                localStorage.setItem("isSentNotifi", true)
+            })
 
-    const dateList = [tomorrow, afterTomorrow]
-    dbInstance.remind(dateList).then(data => {
-      data.forEach(item => {
-        const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
-        
-        if (!isSentNotifi) {
-          const noti = new Notification({title: "Nhắc nhở", body: item.title})
-          
-          noti.on('close', () => {
-            localStorage.setItem("isSentNotifi", true)
-          })
+            noti.on('click', () => {
+                localStorage.setItem("isSentNotifi", true)
+            })
 
-          noti.on('click', () => {
-            localStorage.setItem("isSentNotifi", true)
-          })
-
-          noti.show();
-        }
-      })
-    })
+            noti.show();
+            }
+        })
+        })
+    } catch (e) {
+        console.log(e)
+    }
   }
 
 document.getElementById('btn-add').addEventListener('click', (e) => {
@@ -196,14 +194,14 @@ const handleMouseMove = debounce((e) => {
     localStorage.setItem('currentPage', 1)
     let { name, value = ' ' } = e.target.value;
     objFilter = {
-        findName: findInput.value,
+        findName: findInput.value.toUpperCase(),
         secure: secureInput.value,
-        sendPlace: sendPlaceInput.value,
+        sendPlace: sendPlaceInput.value.toUpperCase(),
         // receiveDate: new Date(receiveDateInput.value).toDateString(),
     }
     objFilter = {
         ...objFilter,
-        [name]: value
+        [name]: value.toUpperCase()
     }
     updateView(objFilter)
   }, 400);
