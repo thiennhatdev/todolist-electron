@@ -37,6 +37,9 @@ const todoItemSchema = {
       isDone: {
         type: 'boolean',
         default: false
+      },
+      filterText: {
+        type: "string"
       }
     },
 };
