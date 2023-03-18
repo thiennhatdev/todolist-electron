@@ -3,9 +3,10 @@ const electron = require('electron');
 const Ajv = require('ajv');
 const todoItemSchema = require('../schemas/todoItem');
 const { LIMIT } = require('./variables.js');
-const app = electron.app;
-const userData = app.getAppPath('userData');
 const path = require("path");
+const moment = require('moment');
+
+const app = electron.app;
 
 class TodoItemStore {
     constructor() {
@@ -43,8 +44,12 @@ class TodoItemStore {
     }
 
     readAll(objFilter, page, limit = LIMIT) {
-        const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
+        const fromReceiveDateDefault = moment('01/01/1970', 'DD/MM/YYYY').valueOf();
+        const toReceiveDateDefault = moment('01/01/3000', 'DD/MM/YYYY').valueOf();
+        const { findName = '', secure = '', sendPlace = '', fromReceiveDate = fromReceiveDateDefault, toReceiveDate = toReceiveDateDefault } = objFilter || {};
+        
         return this.db.find({
+                receiveDate: { $gte: fromReceiveDate, $lte: toReceiveDate },
                 filterText: { $regex: new RegExp(`${findName}`) },  
                 secure: { $regex: new RegExp(`${secure}`) },
                 sendPlace: { $regex: new RegExp(`${sendPlace}`) },

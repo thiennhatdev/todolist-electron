@@ -17,7 +17,7 @@ const todoItemSchema = {
         type: 'string',
       },
       receiveDate: {
-        type: 'string',
+        type: 'number',
       },
       require: {
         type: 'string',

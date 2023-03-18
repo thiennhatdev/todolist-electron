@@ -7,7 +7,6 @@ require('dotenv').config();
 
 const isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
 
-console.log(isDev, 'isDev')
 if (isDev) {
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
@@ -63,6 +62,10 @@ function createWindow () {
 
   ipcMain.on('data-from-edit', (event, arg) => {
       openAddWindow(arg);
+  });
+
+  ipcMain.on('add-edit-success', (event, arg) => {
+    mainWindow.webContents.send('add-edit-success', {})
   });
 
   // and load the index.html of the app.

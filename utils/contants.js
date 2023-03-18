@@ -4,7 +4,7 @@ var LIMIT = 10;
 var MUC_DO_MAT = {
     TAT_CA: {
         value: "",
-        label: "Tất cả",
+        label: "Tất cả văn bản",
         style: 'badge badge-secondary',
     },
     HANH_CHINH: {
