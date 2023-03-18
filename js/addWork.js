@@ -3,6 +3,7 @@ require("bootstrap-datepicker")
 const { ipcRenderer, remote } = require('electron');
 const path = require('path');
 const $ = require('jquery');
+const moment = require('moment');
 
 
 const Notification = remote.Notification;
@@ -51,11 +52,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             </div>
         `
 
-        formAddNotification.appendChild(newNode)
-
-        $(".datepicker").datepicker({
-            format: "dd/mm/yyyy"
-        })
+        formAddNotification.appendChild(newNode);
     })
 
     $(".datepicker").datepicker({
@@ -98,7 +95,7 @@ ipcRenderer.on('item-work', (event, item) => {
         contentField.value = content;
         secureField.value = secure;
         sendPlaceField.value = sendPlace;
-        receiveDateField.value = receiveDate;
+        receiveDateField.value = moment(receiveDate).format('DD/MM/YYYY');
         requireField.value = require;
         progressField.value = progress;
         searchKeywordField.value = searchKeyword;
@@ -141,7 +138,7 @@ ipcRenderer.on('item-work', (event, item) => {
             content: contentField.value,
             secure: secureField.value,
             sendPlace: sendPlaceField.value.toUpperCase(),
-            receiveDate: receiveDateField.value,
+            receiveDate: moment(receiveDateField.value, 'DD/MM/YYYY').valueOf(),
             require: requireField.value,
             remind: notificationList,
             approve: approveField.value,
@@ -164,19 +161,26 @@ ipcRenderer.on('item-work', (event, item) => {
             return
         }
 
-        if (!_id) {
-            dbInstance.create(body)
-            .then(res => {
-                new Notification({title: "Thành công!", body: 'Thêm mới thành công!'}).show()
-                remote.getCurrentWindow().close();
-            })
-        } else {
-            dbInstance.archive(_id, body)
-            .then(res => {
-                new Notification({title: "Thành công!", body: 'Sửa thành công!'}).show()
-                remote.getCurrentWindow().close();
-            })
+        try {
+            if (!_id) {
+                dbInstance.create(body)
+                .then(res => {
+                    new Notification({title: "Thành công!", body: 'Thêm mới thành công!'}).show();
+                    ipcRenderer.send('add-edit-success', {})
+                    remote.getCurrentWindow().close();
+                })
+            } else {
+                dbInstance.archive(_id, body)
+                .then(res => {
+                    new Notification({title: "Thành công!", body: 'Sửa thành công!'}).show()
+                    ipcRenderer.send('add-edit-success', {})
+                    remote.getCurrentWindow().close();
+                })
+            }
+        } catch (e) {
         }
+
+        
 
     })
 })

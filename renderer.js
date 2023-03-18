@@ -1,11 +1,16 @@
+require("bootstrap-datepicker")
+
 const { remote, ipcRenderer } = require('electron');
 const moment = require('moment');
+const $ = require('jquery');
 
 const Notification = remote.Notification;
 
 const dbInstance = remote.getGlobal('db');
 
-const secureField = document.querySelector('.filter-secure');;
+const fromReceiveDateField = document.querySelector('.from-receive-date');
+const toReceiveDateField = document.querySelector('.to-receive-date');
+const secureField = document.querySelector('.filter-secure');
 const findInput = 
 document.querySelector('#work-find-input');
 const secureInput = document.querySelector('.filter-secure');
@@ -37,7 +42,7 @@ function createTodoItemView(item) {
         <td><span>${title}</span></td>
         <td><span class='text-nowrap ${MUC_DO_MAT[`${secure}`]?.style}'>${MUC_DO_MAT[`${secure}`]?.label}</span></td>
         <td><span>${sendPlace}</span></td>
-        <td><span class='text-nowrap'>${receiveDate}</span></td>
+        <td><span class='text-nowrap'>${moment(receiveDate).format('DD/MM/YYYY')}</span></td>
         <td><span>${content}</span></td>
         <td><span>${require || '-'}</span></td>
         <td>
@@ -146,8 +151,8 @@ function sendNotification() {
     try {
         let format = 'DD/MM/YYYY';
         let today = new Date();
-        let tomorrow = moment(today).add('days', 1).format(format);
-        let afterTomorrow = moment(today).add('days', 2).format(format);
+        let tomorrow = moment(today).add(1, 'days').format(format);
+        let afterTomorrow = moment(today).add(2, 'days').format(format);
 
         const dateList = [tomorrow, afterTomorrow];
         dbInstance.remind(dateList).then(data => {
@@ -193,25 +198,40 @@ const debounce = (callback, wait) => {
 const handleMouseMove = debounce((e) => {
     localStorage.setItem('currentPage', 1)
     let { name, value = ' ' } = e.target.value;
+
     objFilter = {
         findName: findInput.value.toUpperCase(),
         secure: secureInput.value,
         sendPlace: sendPlaceInput.value.toUpperCase(),
-        // receiveDate: new Date(receiveDateInput.value).toDateString(),
-    }
-    objFilter = {
-        ...objFilter,
         [name]: value.toUpperCase()
     }
+
     updateView(objFilter)
   }, 400);
 
+fromReceiveDateField.addEventListener('changeDate',handleMouseMove)
+toReceiveDateField.addEventListener('changeDate',handleMouseMove)
 findInput.addEventListener('keyup',handleMouseMove)
 secureInput.addEventListener('change',handleMouseMove)
 sendPlaceInput.addEventListener('keyup',handleMouseMove)
-// receiveDateInput.addEventListener('change',handleMouseMove)
+
 
 // find document === END
 updateView(objFilter);
 
 sendNotification();
+
+$(".datepicker").datepicker({
+    format: "dd/mm/yyyy"
+}).on('change', (e, v) => {
+    const { name, value } = e.target;
+    objFilter = {
+        ...objFilter,
+        [name]: moment(value, 'DD/MM/YYYY').valueOf(),
+    }
+    updateView(objFilter)
+})
+
+ipcRenderer.on('add-edit-success', (event) => {
+    updateView(objFilter)
+})
