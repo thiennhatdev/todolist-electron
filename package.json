@@ -24,8 +24,12 @@
     "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
+<<<<<<< HEAD
     "electron": "^8.2.5",
     "electron-vite": "^1.0.20"
+=======
+    "electron": "^8.2.5"
+>>>>>>> e0df385f412d5a3ed94e613f032ece40f98cf269
   },
   "dependencies": {
     "ajv": "^6.12.2",
@@ -35,6 +39,11 @@
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.6.4",
     "moment": "^2.29.4",
+<<<<<<< HEAD
     "nedb-promises": "^4.0.3"
+=======
+    "nedb-promises": "^4.0.3",
+    "yarn": "^1.22.19"
+>>>>>>> e0df385f412d5a3ed94e613f032ece40f98cf269
   }
 }
