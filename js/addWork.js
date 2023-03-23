@@ -53,10 +53,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
         `
 
         formAddNotification.appendChild(newNode);
+        $(".datepicker").datepicker({
+            format: "dd/mm/yyyy",
+          })
     })
 
     $(".datepicker").datepicker({
-        //Datepicker settings
         format: "dd/mm/yyyy",
         // endDate: "0d",
         //   clearBtn: true,
@@ -87,6 +89,9 @@ ipcRenderer.on('item-work', (event, item) => {
                 </div>
             `
             formAddNotification.appendChild(newNode)
+            $(".datepicker").datepicker({
+            format: "dd/mm/yyyy",
+            })
         })
 
         
@@ -179,8 +184,6 @@ ipcRenderer.on('item-work', (event, item) => {
             }
         } catch (e) {
         }
-
-        
 
     })
 })
