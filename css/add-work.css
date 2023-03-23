@@ -4,6 +4,11 @@
     width: 70%;
 }
 
+.titleSmall {
+    color: red;
+    font-family:'Times New Roman', Times, serif;
+}
+
 .wrap-input-field {
     display: flex;
     justify-content: space-between;
@@ -22,3 +27,11 @@
     width: 40% !important;
     margin-left: 20px;
 }
+
+.contactName {
+    margin-top: 20px;
+    text-align: center;
+    color: black;
+    font-style: italic;
+    font-family: 'Courier New', Courier, monospace;
+  }
