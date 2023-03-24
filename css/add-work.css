@@ -1,3 +1,8 @@
+.add-work {
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
 .add-work input,
 .add-work textarea,
 .add-work select {
@@ -31,7 +36,17 @@
 .contactName {
     margin-top: 20px;
     text-align: center;
-    color: black;
+    background: #dc3545;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
     font-style: italic;
     font-family: 'Courier New', Courier, monospace;
-  }
+    padding-top: 10px;
+}
+
+.contactName p {
+    margin-bottom: 10px;
+}

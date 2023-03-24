@@ -14,6 +14,10 @@ ul {
   padding: 0;
 }
 
+.wrap-todolist {
+  min-height: 95vh;
+}
+
 .wrap-filter input,
 .wrap-filter select {
   width: 150px;
@@ -57,11 +61,17 @@ td span {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: black;
+  background: #dc3545;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
   font-style: italic;
   font-family: 'Courier New', Courier, monospace;
+  padding-top: 10px;
 }
 
-.contactName p:first-child {
-  margin: 10px auto;
+.contactName p {
+  margin-bottom: 10px;
 }
