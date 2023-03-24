@@ -14,6 +14,10 @@ ul {
   padding: 0;
 }
 
+.wrap-todolist {
+  min-height: 100vh;
+}
+
 .wrap-filter input,
 .wrap-filter select {
   width: 150px;

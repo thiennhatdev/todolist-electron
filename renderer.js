@@ -157,22 +157,27 @@ function sendNotification() {
         const dateList = [tomorrow, afterTomorrow];
         dbInstance.remind(dateList).then(data => {
             data.forEach(item => {
-            const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
-            
-            if (!isSentNotifi) {
-            const noti = new Notification({title: "Nhắc nhở", body: item.title})
-            
-            noti.on('close', () => {
-                localStorage.setItem("isSentNotifi", true)
-            })
+                const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
+                
+                if (!isSentNotifi) {
+                    item.remind.forEach(val => {
+                        if (dateList.includes(val.time)) {
+                            const noti = new Notification({title: val.time, body: val.title});
+                    
+                            noti.on('close', () => {
+                                localStorage.setItem("isSentNotifi", true)
+                            })
 
-            noti.on('click', () => {
-                localStorage.setItem("isSentNotifi", true)
-            })
+                            noti.on('click', () => {
+                                localStorage.setItem("isSentNotifi", true)
+                            })
 
-            noti.show();
-            }
-        })
+                            noti.show();
+                        }
+                    })
+                    
+                }
+            })
         })
     } catch (e) {
         console.log(e)
