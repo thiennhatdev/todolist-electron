@@ -15,12 +15,17 @@ ul {
 }
 
 .wrap-todolist {
-  min-height: 100vh;
+  min-height: 95vh;
 }
 
 .wrap-filter input,
 .wrap-filter select {
   width: 150px;
+}
+
+.titleBig {
+  color: red;
+  font-family:'Times New Roman', Times, serif;
 }
 
 .work-list {
@@ -49,4 +54,24 @@ td span {
 
 .page-item.active {
   background-color: #007bff;
+}
+
+.contactName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #dc3545;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  font-style: italic;
+  font-family: 'Courier New', Courier, monospace;
+  padding-top: 10px;
+}
+
+.contactName p {
+  margin-bottom: 10px;
 }

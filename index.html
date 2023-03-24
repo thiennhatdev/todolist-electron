@@ -5,14 +5,15 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Todolist</title>
+    <title>Quản lý công việc</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
   </head>
   <body>
     <div class='jumbotron mb-0 wrap-todolist'>
-      <h1 class='text-center mb-5'>My to do list</h1>
+      <h4 class="text-center titleBig">CÔNG AN THÀNH PHỐ HẢI PHÒNG - PHÒNG AN NINH KỸ THUẬT</h4>
+      <h1 class='text-center mb-5 text-primary mt-3 font-weight-bold'>ỨNG DỤNG QUẢN LÝ CÔNG  VIỆC</h1>
       <div class='d-flex justify-content-between align-items-end'>
         <div>
           <button id="btn-add" class='btn btn-primary'>Thêm mới</button>
@@ -47,7 +48,7 @@
               <th scope="col" class='min-w-300'>Nội dung văn bản</th>
               <th scope="col">Yêu cầu của văn bản</th>
               <th scope="col">Nhắc nhở</th>
-              <th scope="col">Phê duyệt của lãnh đạo</th>
+              <th scope="col">Người thực hiện</th>
               <th scope="col">Tiến độ thực hiện</th>
               <th scope="col">Từ khoá tìm kiếm</th>
               <th scope="col">Quản lý</th>
@@ -62,7 +63,12 @@
       <div class="wrap-pagination d-flex justify-content-end mt-5"></div>
     </div>
     <!-- You can also require other files to run in this process -->
-    
+    <footer>
+      <div class="contactName">
+        <p>Liên hệ: Thượng úy Nguyễn Tuấn Hiển, cán bộ đội 1, phòng PA06, CATP Hải Phòng.</p>
+        <p>Số điện thoại: 0987.364.404</p>
+      </div> 
+    </footer>
     <script src="utils/contants.js"></script>
     <script src="./renderer.js"></script>
   </body>
