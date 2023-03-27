@@ -205,6 +205,8 @@ const handleMouseMove = debounce((e) => {
     let { name, value = ' ' } = e.target.value;
 
     objFilter = {
+        fromReceiveDate: moment(fromReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
+        toReceiveDate: moment(toReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
         findName: findInput.value.toUpperCase(),
         secure: secureInput.value,
         sendPlace: sendPlaceInput.value.toUpperCase(),
@@ -230,6 +232,8 @@ $(".datepicker").datepicker({
     format: "dd/mm/yyyy"
 }).on('change', (e, v) => {
     const { name, value } = e.target;
+    localStorage.setItem('currentPage', 1);
+    
     objFilter = {
         ...objFilter,
         [name]: moment(value, 'DD/MM/YYYY').valueOf(),

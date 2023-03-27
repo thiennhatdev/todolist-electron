@@ -23,6 +23,11 @@ ul {
   width: 150px;
 }
 
+.wrap-pagination {
+  z-index: 0;
+  position: relative;
+}
+
 .titleBig {
   color: red;
   font-family:'Times New Roman', Times, serif;
@@ -30,7 +35,7 @@ ul {
 
 .work-list {
   overflow: auto;
-  max-height: 50vh;
+  max-height: 46vh;
 }
 
 .work-list tbody tr {
