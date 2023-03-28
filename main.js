@@ -64,6 +64,8 @@ function createWindow () {
       openAddWindow(arg);
   });
 
+  console.log('run main')
+
   ipcMain.on('add-edit-success', (event, arg) => {
     mainWindow.webContents.send('add-edit-success', {})
   });
@@ -87,7 +89,6 @@ app.whenReady().then(() => {
     localStorage.removeItem('currentPage')
     `, true)
   .then(localStorage => {
-    console.log(localStorage);
   });
 })
 

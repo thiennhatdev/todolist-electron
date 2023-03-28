@@ -164,13 +164,17 @@ function sendNotification() {
                         if (dateList.includes(val.time)) {
                             const noti = new Notification({title: val.time, body: val.title});
                     
-                            noti.on('close', () => {
-                                localStorage.setItem("isSentNotifi", true)
-                            })
+                            // noti.on('close', () => {
+                            //     localStorage.setItem("isSentNotifi", true)
+                            // })
 
-                            noti.on('click', () => {
+                            // noti.on('click', () => {
+                            //     localStorage.setItem("isSentNotifi", true)
+                            // })
+
+                            setTimeout(() => {
                                 localStorage.setItem("isSentNotifi", true)
-                            })
+                            }, 3000);
 
                             noti.show();
                         }
