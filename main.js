@@ -1,8 +1,11 @@
-// Modules to control application life and create native browser window
-const {app, ipcMain, ipcRenderer, BrowserWindow, Notification} = require('electron');
+const { app } = require('electron');
 const path = require('path');
-const url = require('url');
-const db = require('./db/stores/todoItem');
+
+const { createAuthWindow } = require('./main/auth-process');
+const createAppWindow = require('./main/app-process');
+const getmac = require('getmac');
+const keytar = require('keytar');
+
 require('dotenv').config();
 
 const isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
@@ -13,97 +16,29 @@ if (isDev) {
   });
 }
 
-global.db = db;
-let mainWindow;
-let addWindow;
-
-function openAddWindow(arg) {
-
-  addWindow = new BrowserWindow({
-    // parent: mainWindow,
-    modal: true,
-    show: false,
-    width: 1400,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  })
-  addWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'addWork.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-  // addWindow.setMenu(null)
-
-  addWindow.once('ready-to-show', () => {
-    addWindow.show()
-    addWindow.webContents.send('item-work', arg);
-  })
-
-  addWindow.on('close', () => {
-    addWindow = null;
-  })
+const user  = {
+  name: 'admin',
+  pw: '123456789987654321'
 }
-
-function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1900,
-    height: 1000,
-    webPreferences: {
-      preload: path.join(__dirname  , 'preload.js'),
-      nodeIntegration: true,
-            contextIsolation: false,
-      //       enableRemoteModule: true,
-    }
-  })
-
-  ipcMain.on('data-from-edit', (event, arg) => {
-      openAddWindow(arg);
+async function showWindow() {
+  const macAddr = getmac.default();
+  // keytar.setPassword(macAddr, user.name, user.pw);
+  const secret = keytar.getPassword(macAddr, user.name);
+  secret.then((result) => {
+      if (result === user.pw) {
+        createAppWindow();
+      } else {
+        createAuthWindow();
+      }
   });
-
-  console.log('run main')
-
-  ipcMain.on('add-edit-success', (event, arg) => {
-    mainWindow.webContents.send('add-edit-success', {})
-  });
-
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  
+  
 }
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
+  showWindow();
 })
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  mainWindow.webContents
-  .executeJavaScript(`
-    localStorage.removeItem('isSentNotifi'); 
-    localStorage.removeItem('currentPage');
-    `, true)
-  .then(localStorage => {
-  });
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') app.quit()
-  
-})
-
-app.on('activate', function () {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+app.on('window-all-closed', () => {
+  app.quit();
+});

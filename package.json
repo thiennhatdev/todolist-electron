@@ -32,7 +32,9 @@
     "dotenv": "^16.0.3",
     "electron-reload": "^2.0.0-alpha.1",
     "electron-squirrel-startup": "^1.0.0",
+    "getmac": "^5.20.0",
     "jquery": "^3.6.4",
+    "keytar": "^7.9.0",
     "moment": "^2.29.4",
     "nedb-promises": "^4.0.3",
     "yarn": "^1.22.19"
