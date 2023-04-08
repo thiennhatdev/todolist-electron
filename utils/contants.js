@@ -17,13 +17,13 @@ var MUC_DO_MAT = {
         label: "Mật",
         style: 'badge badge-secondary'
     },
-    TOI_MAT: {
-        value: "TOI_MAT",
+    TOI: {
+        value: "TOI",
         label: "Tối mật",
         style: 'badge badge-dark'
     },
-    TUYET_MAT: {
-        value: "TUYET_MAT",
+    TUYET: {
+        value: "TUYET",
         label: "Tuyệt mật",
         style: 'badge badge-danger'
     },
