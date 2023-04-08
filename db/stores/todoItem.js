@@ -48,7 +48,6 @@ class TodoItemStore {
 
     readAll(objFilter, page, limit = LIMIT) {
         const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate } = objFilter || {};
-        
         return this.db.find({
                 receiveDate: { $gte: fromReceiveDate || this.fromReceiveDateDefault, $lte: toReceiveDate || this.toReceiveDateDefault },
                 filterText: { $regex: new RegExp(`${findName}`) },  
