@@ -17,11 +17,12 @@ if (isDev) {
 }
 
 const user  = {
-  name: 'admin',
-  pw: '123456789987654321'
+  name: 'admin1',
+  pw: '123456789'
 }
 async function showWindow() {
   const macAddr = getmac.default();
+  console.log(macAddr);
   // keytar.setPassword(macAddr, user.name, user.pw);
   const secret = keytar.getPassword(macAddr, user.name);
   secret.then((result) => {
