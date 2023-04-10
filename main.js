@@ -1,5 +1,4 @@
 const { app } = require('electron');
-const path = require('path');
 
 const { createAuthWindow } = require('./main/auth-process');
 const createAppWindow = require('./main/app-process');
@@ -42,4 +41,4 @@ app.whenReady().then(() => {
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   app.quit();
-});
+}); 
