@@ -28,9 +28,11 @@ const titleModal = document.querySelector('.add-work__title');
 const addBtnText = document.querySelector('.btn-add-work');
 
 window.addEventListener('DOMContentLoaded', (event) => {
+    const secureList = Object.values(MUC_DO_MAT);
+    secureList.shift();
     secureField.innerHTML = `
         <option disabled selected value="">Mức độ mật</option>
-        ${Object.values(MUC_DO_MAT).map(item => (
+        ${secureList.map(item => (
             `<option value=${item.value}>${item.label}</option>`
         ))}
     `
@@ -104,15 +106,14 @@ ipcRenderer.on('item-work', (event, item) => {
         requireField.value = require;
         progressField.value = progress;
         searchKeywordField.value = searchKeyword;
-        titleModal.innerText = 'Sửa công việc';
+        titleModal.innerText = 'SỬA CÔNG VIỆC';
         addBtnText.innerText = 'Sửa';
     } else {
-        titleModal.innerText = 'Thêm công việc';
+        titleModal.innerText = 'THÊM CÔNG VIỆC';
         addBtnText.innerText = 'Thêm';
     }
 
     btnAddWork.addEventListener('click', (e) => {
-        
         let regexSplitFileNameOnWin = /[^\\]*$/;
         let regexSplitFileNameOnMac = /[^\/]*$/;
         let fileName = fileField.files[0]?.name;
@@ -124,8 +125,6 @@ ipcRenderer.on('item-work', (event, item) => {
         let validateText = '';
         let itemAddNotification = document.querySelectorAll('.item-add-notification');
         let notificationList = [];
-
-        
 
         itemAddNotification.forEach(item => {
             notificationList.push({

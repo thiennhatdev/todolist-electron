@@ -157,22 +157,31 @@ function sendNotification() {
         const dateList = [tomorrow, afterTomorrow];
         dbInstance.remind(dateList).then(data => {
             data.forEach(item => {
-            const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
-            
-            if (!isSentNotifi) {
-            const noti = new Notification({title: "Nhắc nhở", body: item.title})
-            
-            noti.on('close', () => {
-                localStorage.setItem("isSentNotifi", true)
-            })
+                const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
+                
+                if (!isSentNotifi) {
+                    item.remind.forEach(val => {
+                        if (dateList.includes(val.time)) {
+                            const noti = new Notification({title: val.time, body: val.title});
+                    
+                            // noti.on('close', () => {
+                            //     localStorage.setItem("isSentNotifi", true)
+                            // })
 
-            noti.on('click', () => {
-                localStorage.setItem("isSentNotifi", true)
-            })
+                            // noti.on('click', () => {
+                            //     localStorage.setItem("isSentNotifi", true)
+                            // })
 
-            noti.show();
-            }
-        })
+                            setTimeout(() => {
+                                localStorage.setItem("isSentNotifi", true)
+                            }, 3000);
+
+                            noti.show();
+                        }
+                    })
+                    
+                }
+            })
         })
     } catch (e) {
         console.log(e)
@@ -200,6 +209,8 @@ const handleMouseMove = debounce((e) => {
     let { name, value = ' ' } = e.target.value;
 
     objFilter = {
+        fromReceiveDate: moment(fromReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
+        toReceiveDate: moment(toReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
         findName: findInput.value.toUpperCase(),
         secure: secureInput.value,
         sendPlace: sendPlaceInput.value.toUpperCase(),
@@ -225,6 +236,8 @@ $(".datepicker").datepicker({
     format: "dd/mm/yyyy"
 }).on('change', (e, v) => {
     const { name, value } = e.target;
+    localStorage.setItem('currentPage', 1);
+    
     objFilter = {
         ...objFilter,
         [name]: moment(value, 'DD/MM/YYYY').valueOf(),

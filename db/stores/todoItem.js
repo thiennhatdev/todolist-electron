@@ -26,6 +26,9 @@ class TodoItemStore {
             autoLoad: true,
             corruptAlertThreshold: 1
         });
+        this.fromReceiveDateDefault = moment('01/01/1970', 'DD/MM/YYYY').valueOf();
+        this.toReceiveDateDefault = moment('01/01/3000', 'DD/MM/YYYY').valueOf();
+
     }
 
     validate(data) {
@@ -44,16 +47,14 @@ class TodoItemStore {
     }
 
     readAll(objFilter, page, limit = LIMIT) {
-        const fromReceiveDateDefault = moment('01/01/1970', 'DD/MM/YYYY').valueOf();
-        const toReceiveDateDefault = moment('01/01/3000', 'DD/MM/YYYY').valueOf();
-        const { findName = '', secure = '', sendPlace = '', fromReceiveDate = fromReceiveDateDefault, toReceiveDate = toReceiveDateDefault } = objFilter || {};
-        
+        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate } = objFilter || {};
         return this.db.find({
-                receiveDate: { $gte: fromReceiveDate, $lte: toReceiveDate },
+                receiveDate: { $gte: fromReceiveDate || this.fromReceiveDateDefault, $lte: toReceiveDate || this.toReceiveDateDefault },
                 filterText: { $regex: new RegExp(`${findName}`) },  
                 secure: { $regex: new RegExp(`${secure}`) },
                 sendPlace: { $regex: new RegExp(`${sendPlace}`) },
             })
+                .sort({ createdAt: -1 })
                 .skip(page * limit - limit)
                 .limit(limit);
     }
@@ -67,8 +68,9 @@ class TodoItemStore {
     }
 
     totalRecord(objFilter) {
-        const { findName = '', secure = '', sendPlace = '', receiveDate = null } = objFilter || {};
+        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate } = objFilter || {};
         return this.db.count({ 
+            receiveDate: { $gte: fromReceiveDate || this.fromReceiveDateDefault, $lte: toReceiveDate || this.toReceiveDateDefault },
             filterText: { $regex: new RegExp(`${findName}`) },
             secure: { $regex: new RegExp(`${secure}`) },
             sendPlace: { $regex: new RegExp(`${sendPlace}`) },
