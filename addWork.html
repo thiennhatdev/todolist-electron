@@ -9,10 +9,10 @@
 <body>
   <div class="add-work container">
     <h6 class="text-center titleSmall">CÔNG AN THÀNH PHỐ HẢI PHÒNG - PHÒNG AN NINH KỸ THUẬT</h6>
-    <h3 class='add-work__title text-center mb-5 mt-3 text-primary font-weight-bold'>THÊM CÔNG VIỆC</h3>
+    <h3 class='add-work__title text-center mb-5 mt-3 text-primary font-weight-bold'>THÊM VĂN BẢN</h3>
     <form id='add-form'>
         <div class='content-field wrap-input-field'>
-          <label>Chọn file :<sup class='text-danger'>(Yêu cầu)</sup></label>
+          <label>Chọn file :</label>
           <input type='file' placeholder='' class='input-file form-control' />
         </div>
         <div class='title-field wrap-input-field'>
@@ -56,6 +56,7 @@
               <div class='d-flex item-add-notification'>
                 <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
                 <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+                <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
               </div>
             </div>
             <div>

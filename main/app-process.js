@@ -71,7 +71,6 @@ function createAppWindow () {
 app.whenReady().then(() => {
   mainWindow.webContents
   .executeJavaScript(`
-    localStorage.removeItem('isSentNotifi'); 
     localStorage.removeItem('currentPage');
     `, true)
   .then(localStorage => {
@@ -84,7 +83,6 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   mainWindow.webContents
   .executeJavaScript(`
-    localStorage.removeItem('isSentNotifi'); 
     localStorage.removeItem('currentPage');
     `, true)
   .then(localStorage => {
