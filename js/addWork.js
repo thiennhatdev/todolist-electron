@@ -51,6 +51,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             <div class='d-flex item-add-notification mt-2'>
                 <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
                 <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+                <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
             </div>
         `
 
@@ -88,6 +89,7 @@ ipcRenderer.on('item-work', (event, item) => {
                 <div class='d-flex item-add-notification mt-2'>
                     <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' value="${item.title}" />
                     <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off" value="${item.time}">
+                    <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
                 </div>
             `
             formAddNotification.appendChild(newNode)
@@ -106,14 +108,15 @@ ipcRenderer.on('item-work', (event, item) => {
         requireField.value = require;
         progressField.value = progress;
         searchKeywordField.value = searchKeyword;
-        titleModal.innerText = 'SỬA CÔNG VIỆC';
+        titleModal.innerText = 'SỬA VĂN BẢN';
         addBtnText.innerText = 'Sửa';
     } else {
-        titleModal.innerText = 'THÊM CÔNG VIỆC';
+        titleModal.innerText = 'THÊM VĂN BẢN';
         addBtnText.innerText = 'Thêm';
     }
 
     btnAddWork.addEventListener('click', (e) => {
+        console.log(e,'tttt')
         let regexSplitFileNameOnWin = /[^\\]*$/;
         let regexSplitFileNameOnMac = /[^\/]*$/;
         let fileName = fileField.files[0]?.name;
@@ -151,7 +154,7 @@ ipcRenderer.on('item-work', (event, item) => {
             filterText: `${titleField.value.toUpperCase()} ${contentField.value.toUpperCase()} ${searchKeywordField.value.toUpperCase()}`
         }
 
-        if (!pathContainFile) validateText = 'Chọn file là bắt buộc!';
+        // if (!pathContainFile) validateText = 'Chọn file là bắt buộc!';
         if (!body.title) validateText = 'Tên văn bản là bắt buộc!';
         if (!body.content) validateText = 'Nội dung là bắt buộc!';
         if (!body.secure) validateText = 'Độ mật là bắt buộc!';
@@ -182,10 +185,17 @@ ipcRenderer.on('item-work', (event, item) => {
                 })
             }
         } catch (e) {
+            console.log(e)
         }
 
     })
 })
+
+const removeRemind = (e) => {
+    e.preventDefault();
+    e.currentTarget.parentNode.remove();
+    // console.log(e)
+}
 
 
 
