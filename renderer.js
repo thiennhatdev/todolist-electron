@@ -16,6 +16,9 @@ const findInput =
 document.querySelector('#work-find-input');
 const secureInput = document.querySelector('.filter-secure');
 const sendPlaceInput = document.querySelector('.filter-send-place');
+const wrapRemindBtn = document.querySelector('.wrap-remind-btn');
+const wrapNotiList = document.querySelector('.wrap-noti-list');
+const wrapNoti = document.querySelector('.wrap-noti');
 
 let objFilter = {
     findName: '',
@@ -158,32 +161,27 @@ function sendNotification() {
 
         const dateList = [tomorrow, afterTomorrow];
         dbInstance.remind(dateList).then(data => {
+            let allNoti = [];
             data.forEach(item => {
-                const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
-                
-                if (!isSentNotifi) {
+                // const isSentNotifi = JSON.parse(localStorage.getItem('isSentNotifi'));
+                // if (!isSentNotifi) {
                     item.remind.forEach(val => {
                         if (dateList.includes(val.time)) {
-                            const noti = new Notification({title: val.time, body: val.title});
-                    
-                            // noti.on('close', () => {
+                            allNoti = [...allNoti, val];
+
+                            // const noti = new Notification({title: val.time, body: val.title});
+
+                            // setTimeout(() => {
                             //     localStorage.setItem("isSentNotifi", true)
-                            // })
+                            // }, 3000);
 
-                            // noti.on('click', () => {
-                            //     localStorage.setItem("isSentNotifi", true)
-                            // })
-
-                            setTimeout(() => {
-                                localStorage.setItem("isSentNotifi", true)
-                            }, 3000);
-
-                            noti.show();
+                            // noti.show();
                         }
                     })
                     
-                }
+                // }
             })
+            showNumberNoti(allNoti);
         })
     } catch (e) {
         console.log(e)
@@ -233,6 +231,27 @@ sendPlaceInput.addEventListener('keyup',handleMouseMove)
 updateView(objFilter);
 
 sendNotification();
+
+const showNumberNoti = (listNoti) => {
+    let countNotiNode = document.createElement('span');
+    countNotiNode.innerText = listNoti.length;
+    countNotiNode.classList.add('count-noti')
+    wrapRemindBtn.appendChild(countNotiNode);
+    listNoti.forEach(item => {
+        const itemNotiNode = document.createElement('li');
+        itemNotiNode.innerHTML = `
+            <span>${item.title}</span>
+            <span>${item.time}</span>
+        `
+        wrapNotiList.appendChild(itemNotiNode)
+    })
+}
+
+wrapRemindBtn.addEventListener('click', () => {
+    let notiDisplay = wrapNoti.style.display;
+    if (notiDisplay === 'block') wrapNoti.style.display = 'none'
+    else wrapNoti.style.display = 'block';
+})
 
 $(".datepicker").datepicker({
     format: "dd/mm/yyyy"

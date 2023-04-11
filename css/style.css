@@ -80,3 +80,64 @@ td span {
 .contactName p {
   margin-bottom: 10px;
 }
+
+.count-noti {
+  background: #ca3737;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f8f9fa;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.wrap-noti {
+  display: none;
+}
+
+.wrap-noti-list {
+  top: 100%;
+  left: 9px;
+  position: absolute;
+  border-radius: 4px;
+  padding: 0 1rem;
+  background: #fff;
+  margin-top: 0.5rem;
+  width: 350px;
+  max-height: 400;
+  overflow: auto;
+}
+
+.wrap-noti-list li {
+  list-style-type: none;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e1e4e6;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.wrap-noti-list li:last-child {
+  border-bottom: none;
+}
+
+.wrap-noti-list li span:last-child {
+  font-size: 0.7rem;
+  margin-left: 0.7rem;
+  display: block;
+  color: #51a6d0;
+}
+
+.polygon-noti {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 0;
+  border-bottom: 9px solid #fff;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  left: 20%;
+}
