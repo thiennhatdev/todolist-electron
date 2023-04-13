@@ -13,7 +13,7 @@
   <body>
     <div class='jumbotron mb-0 wrap-todolist'>
       <h4 class="text-center titleBig">CÔNG AN THÀNH PHỐ HẢI PHÒNG -  PHÒNG KỸ THUẬT NGHIỆP VỤ</h4>
-      <h1 class='text-center mb-5 text-primary mt-3 font-weight-bold'>PHẦN MỀM QUẢN LÝ VĂN BẢN</h1>    
+      <h1 class='text-center mb-5 text-primary mt-3 font-weight-bold'>ỨNG DỤNG QUẢN LÝ VĂN BẢN</h1>
       <div class='d-flex justify-content-between align-items-end'>
         <div class='d-flex'>
           <button id="btn-add" class='btn btn-primary'>Thêm mới</button>
@@ -46,8 +46,8 @@
      
       <hr />
       
-      <div class="work-list">
-        <table class="table table-hover">
+      <div class="work-list table-scroll" id="table-scroll">
+        <table id="main-table" class="table main-table table-resizable table-hover">
           <thead>
             <tr>
               <th scope="col">Stt</th>
@@ -67,20 +67,14 @@
           <tbody class='tbody'>
           </tbody>
         </table>
-        <ul id="todolist">
-        </ul>
       </div>
       <div class="wrap-pagination d-flex justify-content-end mt-5"></div>
-    </div>
-
-    <div id="heroes-list">
-
     </div>
     <!-- You can also require other files to run in this process -->
     <footer>
       <div class="contactName">
         <p>Liên hệ: Phòng PA06 - CATP HẢI PHÒNG</p>
-        <p>Số điện thoại: 0987.364.404</p>
+        <p>Sđt: 0987.364.404</p>
       </div> 
     </footer>
     <script src="utils/contants.js"></script>
