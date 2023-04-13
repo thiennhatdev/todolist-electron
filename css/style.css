@@ -106,7 +106,7 @@ td span {
   padding: 0 1rem;
   background: #fff;
   margin-top: 0.5rem;
-  width: 350px;
+  width: 400px;
   max-height: 400;
   overflow: auto;
 }
@@ -115,8 +115,15 @@ td span {
   list-style-type: none;
   padding: 1rem 0;
   border-bottom: 1px solid #e1e4e6;
+}
+.wrap-noti-list li div:last-child {
   display: flex;
   align-items: flex-end;
+  justify-content: space-between;
+}
+.wrap-noti-list li div:first-child {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -129,6 +136,7 @@ td span {
   margin-left: 0.7rem;
   display: block;
   color: #51a6d0;
+  text-align: right;
 }
 
 .polygon-noti {

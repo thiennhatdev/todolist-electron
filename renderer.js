@@ -16,6 +16,7 @@ document.querySelector('#work-find-input');
 const secureInput = document.querySelector('.filter-secure');
 const sendPlaceInput = document.querySelector('.filter-send-place');
 const wrapRemindBtn = document.querySelector('.wrap-remind-btn');
+const numberNotiNode = document.querySelector('.show-number-noti');
 const wrapNotiList = document.querySelector('.wrap-noti-list');
 const wrapNoti = document.querySelector('.wrap-noti');
 
@@ -148,6 +149,7 @@ function updateView(objFilter = {}) {
             todolistNode.appendChild(trNode);
         });
     })
+    sendNotification();
 }
 
 function sendNotification() {
@@ -165,7 +167,14 @@ function sendNotification() {
                 // if (!isSentNotifi) {
                     item.remind.forEach(val => {
                         if (dateList.includes(val.time)) {
-                            allNoti = [...allNoti, val];
+                            allNoti = [
+                                ...allNoti, 
+                                {
+                                    ...val,
+                                    documentName: item.title,
+                                    sendPlace: item.sendPlace
+                                }
+                            ];
 
                             // const noti = new Notification({title: val.time, body: val.title});
 
@@ -228,21 +237,29 @@ sendPlaceInput.addEventListener('keyup',handleMouseMove)
 // find document === END
 updateView(objFilter);
 
-sendNotification();
-
 const showNumberNoti = (listNoti) => {
-    let countNotiNode = document.createElement('span');
-    countNotiNode.innerText = listNoti.length;
-    countNotiNode.classList.add('count-noti')
-    wrapRemindBtn.appendChild(countNotiNode);
-    listNoti.forEach(item => {
-        const itemNotiNode = document.createElement('li');
-        itemNotiNode.innerHTML = `
-            <span>${item.title}</span>
-            <span>${item.time}</span>
-        `
-        wrapNotiList.appendChild(itemNotiNode)
-    })
+    numberNotiNode.innerText = listNoti.length;
+    numberNotiNode.classList.add('count-noti');
+    if(listNoti.length) {
+        listNoti.forEach(item => {
+            const itemNotiNode = document.createElement('li');
+            itemNotiNode.innerHTML = `
+                <div>
+                    <b>${item.documentName}</b>
+                    <span>Nơi gửi: ${item.sendPlace}</span>
+                </div>
+                <div>
+                    <span>${item.title}</span>
+                    <span>${item.time}</span>
+                </div>
+            `
+            wrapNotiList.appendChild(itemNotiNode)
+        })
+    } else {
+        let emptyNode = document.createElement('li');
+        emptyNode.innerHTML = `<h4 class='text-center text-danger'>Hôm nay không có thông báo!</h4>`;
+        wrapNotiList.appendChild(emptyNode)
+    }
 }
 
 wrapRemindBtn.addEventListener('click', () => {
