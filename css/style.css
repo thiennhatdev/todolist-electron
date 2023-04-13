@@ -33,9 +33,43 @@ ul {
   font-family:'Times New Roman', Times, serif;
 }
 
-.work-list {
+.table-scroll {
+  position: relative;
+  width:100%;
+  z-index: 1;
+  margin: auto;
   overflow: auto;
-  max-height: 46vh;
+  height: max-content;
+  max-height: 52vh;
+}
+.table-scroll table {
+  width: 100%;
+  min-width: 1280px;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 5px 10px;
+  vertical-align: top;
+}
+.table-scroll thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+.table-scroll tfoot,
+.table-scroll tfoot th,
+.table-scroll tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: #666;
+  z-index:4;
 }
 
 .work-list tbody tr {
@@ -65,7 +99,6 @@ td span {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   background: #dc3545;
   color: white;
   position: fixed;
@@ -78,7 +111,7 @@ td span {
 }
 
 .contactName p {
-  margin-bottom: 10px;
+  margin: 0 2% 10px;
 }
 
 .count-noti {
@@ -109,6 +142,7 @@ td span {
   width: 400px;
   max-height: 400;
   overflow: auto;
+  z-index: 10;
 }
 
 .wrap-noti-list li {
