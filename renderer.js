@@ -83,10 +83,7 @@ function createTodoItemView(item) {
 
 function removeItem(_id, event) {
     event.stopPropagation();
-    dbInstance.delete(_id)
-        .then(result => {
-            updateView(objFilter);
-        })
+    ipcRenderer.send('openDialog', _id);
 }
 
 function updateWork(item, event) {
@@ -286,6 +283,13 @@ $(".datepicker").datepicker({
 
 ipcRenderer.on('add-edit-success', (event) => {
     updateView(objFilter)
+})
+
+ipcRenderer.on('dialogResponse', (event, _id) => {
+    dbInstance.delete(_id)
+        .then(result => {
+            updateView(objFilter);
+        })
 })
 
 // create table scroll tbody and fix thead
