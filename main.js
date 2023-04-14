@@ -1,4 +1,4 @@
-const { app } = require('electron');
+const { app, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { createAuthWindow } = require('./main/auth-process');
 const createAppWindow = require('./main/app-process');
@@ -21,7 +21,6 @@ const user  = {
 }
 async function showWindow() {
   const macAddr = getmac.default();
-  console.log(macAddr);
   // keytar.setPassword(macAddr, user.name, user.pw);
   const secret = keytar.getPassword(macAddr, user.name);
   secret.then((result) => {
