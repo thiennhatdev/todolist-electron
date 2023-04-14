@@ -1,6 +1,5 @@
 const { app } = require('electron');
 const path = require('path');
-
 const { createAuthWindow } = require('./main/auth-process');
 const createAppWindow = require('./main/app-process');
 const getmac = require('getmac');
@@ -17,11 +16,12 @@ if (isDev) {
 }
 
 const user  = {
-  name: 'admin',
-  pw: '123456789987654321'
+  name: 'admin1',
+  pw: '123456789'
 }
 async function showWindow() {
   const macAddr = getmac.default();
+  console.log(macAddr);
   // keytar.setPassword(macAddr, user.name, user.pw);
   const secret = keytar.getPassword(macAddr, user.name);
   secret.then((result) => {
@@ -41,4 +41,4 @@ app.whenReady().then(() => {
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   app.quit();
-});
+}); 

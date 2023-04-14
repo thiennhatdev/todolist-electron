@@ -1,3 +1,4 @@
+const path = require('path');
 require("bootstrap-datepicker")
 
 const { remote, ipcRenderer } = require('electron');
@@ -25,6 +26,7 @@ let objFilter = {
     secure: '',
     sendPlace: '',
 }
+
 
 secureField.innerHTML = `
     <option disabled selected value="">Mức độ mật</option>
