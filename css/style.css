@@ -43,6 +43,7 @@ ul {
   overflow: auto;
   height: max-content;
   max-height: 64vh;
+  z-index: 0;
 }
 .table-scroll table {
   width: 100%;

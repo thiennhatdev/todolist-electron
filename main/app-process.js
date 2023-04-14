@@ -1,4 +1,4 @@
-const {app, ipcMain, ipcRenderer, BrowserWindow, Notification, electron} = require('electron');
+const {app, ipcMain, dialog, BrowserWindow, Notification, electron} = require('electron');
 const path = require('path');
 const url = require('url');
 const db = require('../db/stores/todoItem');
@@ -57,6 +57,32 @@ function createAppWindow () {
   ipcMain.on('add-edit-success', (event, arg) => {
     mainWindow.webContents.send('add-edit-success', {})
   });
+
+  ipcMain.on('openDialog', (event, _id) => {
+    dialog.showMessageBox(mainWindow, {
+        'type': 'question',
+        'title': 'Confirmation',
+        'message': "Bạn có chắc chắn muốn xoá văn bản này ?",
+        'buttons': [
+            'Có',
+            'Không'
+        ]
+    })
+        // Dialog returns a promise so let's handle it correctly
+        .then((result) => {
+            // Bail if the user pressed "No" or escaped (ESC) from the dialog box
+            if (result.response !== 0) { return; }
+  
+            // Testing.
+            if (result.response === 0) {
+                console.log('The "Yes" button was pressed (main process)', _id);
+            }
+  
+            // Reply to the render process
+            mainWindow.webContents.send('dialogResponse', _id);
+        })
+  })
+  
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
