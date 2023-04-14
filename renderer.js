@@ -43,12 +43,12 @@ function createTodoItemView(item) {
     trNode.innerHTML = 
     `
         <th scope="row"><span>${stt}</th>
-        <td><span>${title}</span></td>
+        <td><span title='${title}'>${title}</span></td>
         <td><span class='text-nowrap ${MUC_DO_MAT[`${secure}`]?.style}'>${MUC_DO_MAT[`${secure}`]?.label}</span></td>
         <td><span>${sendPlace}</span></td>
         <td><span class='text-nowrap'>${moment(receiveDate).format('DD/MM/YYYY')}</span></td>
-        <td><span>${content}</span></td>
-        <td><span>${require || '-'}</span></td>
+        <td><span title='${content}'>${content}</span></td>
+        <td><span title='${require}'>${require || '-'}</span></td>
         <td>
             ${
                 remind 
@@ -62,7 +62,7 @@ function createTodoItemView(item) {
         </td>
         <td><span>${approve}</span></td>
         <td><span class='${QUA_TRINH[progress]?.style}'>${QUA_TRINH[progress]?.label || '-'}</span></td>
-        <td><span>${searchKeyword || '-'}</span></td>
+        <td><span title='${searchKeyword}'>${searchKeyword || '-'}</span></td>
         <td>
             <div class='d-flex'>
                 <button 
