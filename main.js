@@ -16,20 +16,23 @@ if (isDev) {
 }
 
 const user  = {
-  name: 'admin1',
+  name: 'admin',
   pw: '123456789'
 }
 async function showWindow() {
   const macAddr = getmac.default();
-  // keytar.setPassword(macAddr, user.name, user.pw);
+  //keytar.setPassword(macAddr, user.name, user.pw);
   const secret = keytar.getPassword(macAddr, user.name);
-  secret.then((result) => {
-      if (result === user.pw) {
-        createAppWindow();
-      } else {
-        createAuthWindow();
-      }
-  });
+  //console.log(secret, 'dong 26');
+  secret
+    .then((result) => {
+      //console.log(result, 'lấy đc pasword ở đây...')
+        if (result === user.pw) {
+          createAppWindow();
+        } else {
+          createAuthWindow();
+        }
+    });
   
   
 }
