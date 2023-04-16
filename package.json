@@ -35,6 +35,7 @@
     "getmac": "^5.20.0",
     "jquery": "^3.6.4",
     "keytar": "^7.9.0",
+    "macaddress": "^0.5.3",
     "moment": "^2.29.4",
     "nedb-promises": "^4.0.3",
     "yarn": "^1.22.19"
