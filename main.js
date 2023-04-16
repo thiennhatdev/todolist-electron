@@ -4,6 +4,7 @@ const { createAuthWindow } = require('./main/auth-process');
 const createAppWindow = require('./main/app-process');
 const getmac = require('getmac');
 const keytar = require('keytar');
+var macaddress = require('macaddress');
 
 require('dotenv').config();
 
@@ -17,21 +18,29 @@ if (isDev) {
 
 const user  = {
   name: 'admin1',
-  pw: '123456789'
+  pw: '12345678910'
 }
+
 async function showWindow() {
+  
   const macAddr = getmac.default();
   // keytar.setPassword(macAddr, user.name, user.pw);
-  const secret = keytar.getPassword(macAddr, user.name);
-  secret.then((result) => {
-      if (result === user.pw) {
+  let arrPromise = [];
+
+  macaddress.all(function (err, all) {
+    Object.values(all).forEach(item => {
+      const secret = keytar.getPassword(item.mac || '982kjshdf8234', user.name);
+      arrPromise.push(secret);
+    })
+    Promise.all(arrPromise).then(data => {
+      let pass = data.find(item => item);
+      if (pass === user.pw) {
         createAppWindow();
       } else {
         createAuthWindow();
       }
+    })
   });
-  
-  
 }
 app.whenReady().then(() => {
   showWindow();
