@@ -1,10 +1,10 @@
-const { app, ipcMain, dialog } = require('electron');
+const { app } = require('electron');
 const path = require('path');
 const { createAuthWindow } = require('./main/auth-process');
 const createAppWindow = require('./main/app-process');
 const getmac = require('getmac');
 const keytar = require('keytar');
-var macaddress = require('macaddress');
+const macaddress = require('macaddress');
 
 require('dotenv').config();
 

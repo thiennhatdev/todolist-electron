@@ -1,7 +1,7 @@
 const path = require('path');
 require("bootstrap-datepicker")
 
-const { remote, ipcRenderer } = require('electron');
+const { remote, ipcRenderer, shell } = require('electron');
 const moment = require('moment');
 const $ = require('jquery');
 
@@ -20,6 +20,7 @@ const wrapRemindBtn = document.querySelector('.wrap-remind-btn');
 const numberNotiNode = document.querySelector('.show-number-noti');
 const wrapNotiList = document.querySelector('.wrap-noti-list');
 const wrapNoti = document.querySelector('.wrap-noti');
+const btnWebcam = document.querySelector('#btn-open-webcam');
 
 let objFilter = {
     findName: '',
@@ -196,6 +197,10 @@ function sendNotification() {
 
 document.getElementById('btn-add').addEventListener('click', (e) => {
     ipcRenderer.send('data-from-edit', {})
+})
+
+btnWebcam.addEventListener('click', () => {
+    shell.openItem(process.env.PATH_WEBCAM);
 })
 
 // find document === START
