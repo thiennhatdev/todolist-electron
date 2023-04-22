@@ -200,7 +200,7 @@ document.getElementById('btn-add').addEventListener('click', (e) => {
 })
 
 btnWebcam.addEventListener('click', () => {
-    shell.openItem(process.env.PATH_WEBCAM);
+    shell.openItem("C:\\Users\\TU LANH\\Desktop\\De an tot nghiep\\scan_hoso\\scan.exe");
 })
 
 // find document === START
