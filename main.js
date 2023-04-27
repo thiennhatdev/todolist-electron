@@ -22,11 +22,13 @@ const user  = {
 }
 
 async function showWindow() {
+  try {
+    const  macAddrs = ['C8:D3:FF:71:E1:CE','F0:D5:BF:4B:2A:F9', 'F0:D5:BF:4B:2A:F8'];
+  // keytar.setPassword(macAddr, user.name, user.pw);
   
-  const macAddr = ['B0:7B:25:45:AC:9A','A4:97:B1:40:60:DD'];
-  //const macAddr = getmac.default();
-  //console.log('macAddr la: ' + macAddr)
-  keytar.setPassword(macAddr, user.name, user.pw);
+  macAddrs.forEach(function(macAddr) {
+    keytar.setPassword(macAddr, user.name, user.pw);
+  })
   let arrPromise = [];
 
   macaddress.all(function (err, all) {
@@ -34,6 +36,7 @@ async function showWindow() {
       const secret = keytar.getPassword(item.mac.toUpperCase() || '982kjshdf8234', user.name);
       arrPromise.push(secret);
     })
+    
     Promise.all(arrPromise).then(data => {
       let pass = data.find(item => item);
       if (pass === user.pw) {
@@ -43,7 +46,12 @@ async function showWindow() {
       }
     })
   });
+  } catch (err) {
+    createAuthWindow()
+  }
 }
+
+
 app.whenReady().then(() => {
   showWindow();
 })
