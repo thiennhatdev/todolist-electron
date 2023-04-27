@@ -17,31 +17,24 @@ if (isDev) {
 }
 
 const user  = {
-  name: 'admin1',
-  pw: '12345678910'
+  name: 'admin12345',
+  pw: '12345678910111213'
 }
 
 async function showWindow() {
-  try {
-    const  macAddrs = ['C8:D3:FF:71:E1:CE','F0:D5:BF:4B:2A:F9'];
-  // keytar.setPassword(macAddr, user.name, user.pw);
   
-  macAddrs.forEach(function(macAddr) {
-    keytar.setPassword(macAddr, user.name, user.pw);
-  })
+  const macAddr = ['B0:7B:25:45:AC:9A','A4:97:B1:40:60:DD'];
+  //const macAddr = getmac.default();
+  //console.log('macAddr la: ' + macAddr)
+  keytar.setPassword(macAddr, user.name, user.pw);
   let arrPromise = [];
 
   macaddress.all(function (err, all) {
-    dialog.showMessageBox(null, {
-      message: `${JSON.stringify(all)}, data`
-    })
     Object.values(all).forEach(item => {
-      const secret = keytar.getPassword(item.mac || '982kjshdf8234', user.name);
+      const secret = keytar.getPassword(item.mac.toUpperCase() || '982kjshdf8234', user.name);
       arrPromise.push(secret);
     })
-    
     Promise.all(arrPromise).then(data => {
-    
       let pass = data.find(item => item);
       if (pass === user.pw) {
         createAppWindow();
@@ -50,10 +43,10 @@ async function showWindow() {
       }
     })
   });
-  } catch (err) {
-    createAuthWindow()
-  }
 }
+app.whenReady().then(() => {
+  showWindow();
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
