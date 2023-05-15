@@ -17,18 +17,19 @@ if (isDev) {
 }
 
 const user  = {
-  name: 'admin12345',
-  pw: '12345678910111213'
+  name: 'adminhien',
+  pw: '0987364404'
 }
 
 async function showWindow() {
   try {
-    const  macAddrs = ['C8:D3:FF:71:E1:CE','F0:D5:BF:4B:2A:F9', 'F0:D5:BF:4B:2A:F8'];
-  // keytar.setPassword(macAddr, user.name, user.pw);
+    //const  macAddrs = ['C8:D3:FF:71:E1:CE','F0:D5:BF:4B:2A:F9', 'F0:D5:BF:4B:2A:F8'];
+    const macAddr = getmac.default();
+    //keytar.setPassword(macAddr, user.name, user.pw);
   
-  macAddrs.forEach(function(macAddr) {
-    keytar.setPassword(macAddr, user.name, user.pw);
-  })
+  // macAddrs.forEach(function(macAddr) {
+  //   keytar.setPassword(macAddr, user.name, user.pw);
+  // })
   let arrPromise = [];
 
   macaddress.all(function (err, all) {
