@@ -35,7 +35,7 @@
         </div>
         <div class='send-place-field wrap-input-field'>
           <label>Nơi gửi :<sup class='text-danger'>(Yêu cầu)</sup></label>
-          <input placeholder='Nơi gửi' class='input-send-place form-control'/>
+          <input type='text' placeholder='Nơi gửi' class='input-send-place form-control'/>
         </div>
         <div class='receive-date-field wrap-input-field'>
           <label>Ngày nhận :<sup class='text-danger'>(Yêu cầu)</sup></label>
@@ -53,10 +53,20 @@
           </div>
           <div class='wrap-add-notification'>
             <div class='form-add-notification'>
-              <div class='d-flex item-add-notification'>
+              <div class='item-add-notification'>
                 <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
-                <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
-                <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
+                <div class="d-flex mt-2 pb-3 border-bottom justify-content-between">
+                  <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+                  <div class='d-flex align-items-center'>
+                    <input type="radio" name="notification-month" value="MONTH" class="" autocomplete="off" autofill="off">
+                    <label class="text-nowrap m-0 ml-3">Hằng tháng</label>
+                  </div>
+                  <div class='d-flex align-items-center'>
+                    <input type="radio" name="notification-month" value="PRECIOUS" class="" autocomplete="off" autofill="off">
+                    <label class="text-nowrap m-0 ml-3">Hằng quý</label>
+                  </div>
+                  <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
+                </div>
               </div>
             </div>
             <div>
@@ -66,7 +76,7 @@
         </div>
         <div class='progress-field wrap-input-field'>
           <label>Người thực hiện :</label>
-          <input placeholder='Người thực hiện' class='input-approve form-control'/>
+          <input type='text' placeholder='Người thực hiện' class='input-approve form-control'/>
         </div>
         <div class='progress-field wrap-input-field'>
           <label>Tiến độ thực hiện :</label>
