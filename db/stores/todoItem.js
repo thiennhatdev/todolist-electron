@@ -47,12 +47,16 @@ class TodoItemStore {
     }
 
     readAll(objFilter, page, limit = LIMIT) {
-        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate } = objFilter || {};
+        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate, monthRemind } = objFilter || {};
+        const objDate = new Date();
+        const currentYear = objDate.getFullYear();
+        const monthAndYear = monthRemind ? `${monthRemind}/${currentYear}` : '';
         return this.db.find({
                 receiveDate: { $gte: fromReceiveDate || this.fromReceiveDateDefault, $lte: toReceiveDate || this.toReceiveDateDefault },
                 filterText: { $regex: new RegExp(`${findName}`) },  
                 secure: { $regex: new RegExp(`${secure}`) },
                 sendPlace: { $regex: new RegExp(`${sendPlace}`) },
+                "remind.time": new RegExp(`${monthAndYear}`)
             })
                 .sort({ createdAt: -1 })
                 .skip(page * limit - limit)
@@ -68,12 +72,16 @@ class TodoItemStore {
     }
 
     totalRecord(objFilter) {
-        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate } = objFilter || {};
+        const { findName = '', secure = '', sendPlace = '', fromReceiveDate, toReceiveDate, monthRemind } = objFilter || {};
+        const objDate = new Date();
+        const currentYear = objDate.getFullYear();
+        const monthAndYear = monthRemind ? `${monthRemind}/${currentYear}` : '';
         return this.db.count({ 
             receiveDate: { $gte: fromReceiveDate || this.fromReceiveDateDefault, $lte: toReceiveDate || this.toReceiveDateDefault },
             filterText: { $regex: new RegExp(`${findName}`) },
             secure: { $regex: new RegExp(`${secure}`) },
             sendPlace: { $regex: new RegExp(`${sendPlace}`) },
+            "remind.time": new RegExp(`${monthAndYear}`)
         });
     }
 

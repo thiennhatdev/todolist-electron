@@ -46,3 +46,8 @@ var QUA_TRINH = {
         style: 'badge badge-info'
     },
 }
+
+var MONTH_PRECIOUS = {
+    MONTH: "MONTH",
+    PRECIOUS: "PRECIOUS"
+}

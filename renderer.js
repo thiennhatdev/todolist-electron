@@ -4,11 +4,13 @@ require("bootstrap-datepicker")
 const { remote, ipcRenderer, shell } = require('electron');
 const moment = require('moment');
 const $ = require('jquery');
+const _  = require('lodash');
 
 const Notification = remote.Notification;
 
 const dbInstance = remote.getGlobal('db');
 
+const monthRemindField = document.querySelector('.filter-month-remind');
 const fromReceiveDateField = document.querySelector('.from-receive-date');
 const toReceiveDateField = document.querySelector('.to-receive-date');
 const secureField = document.querySelector('.filter-secure');
@@ -43,6 +45,10 @@ function createTodoItemView(item) {
         openFileInFolder(filePath?.path);
     }
 
+    const groupRemind = _.groupBy(remind, item => {
+        return item.time.split('/')[0];
+    });
+
     trNode.innerHTML = 
     `
         <th scope="row"><span>${stt}</th>
@@ -55,9 +61,13 @@ function createTodoItemView(item) {
         <td>
             ${
                 remind 
-                    ? remind.map(item => {
+                    ? Object.values(groupRemind).map(item => {
+                        const firstItem = item[0];
+                        const {time, repeat} = firstItem || {};
                         return (
-                            `<span class='text-nowrap'>${item.time}</span>`
+                            `<span class='text-nowrap'>${time}
+                                ${repeat === MONTH_PRECIOUS.PRECIOUS ? "(Hằng quý)" : repeat === MONTH_PRECIOUS.MONTH ? "(Hằng tháng)" : "" }
+                            </span>`
                         )
                     }).join("")
                     : '-'
@@ -217,8 +227,7 @@ const debounce = (callback, wait) => {
 
 const handleMouseMove = debounce((e) => {
     localStorage.setItem('currentPage', 1)
-    let { name, value = ' ' } = e.target.value;
-
+    let { name, value = ' ' } = e.target;
     objFilter = {
         fromReceiveDate: moment(fromReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
         toReceiveDate: moment(toReceiveDateField.value, 'DD/MM/YYYY').valueOf(),
@@ -231,6 +240,7 @@ const handleMouseMove = debounce((e) => {
     updateView(objFilter)
   }, 400);
 
+monthRemindField.addEventListener('change',handleMouseMove);
 fromReceiveDateField.addEventListener('changeDate',handleMouseMove)
 toReceiveDateField.addEventListener('changeDate',handleMouseMove)
 findInput.addEventListener('keyup',handleMouseMove)

@@ -4,6 +4,7 @@ const { ipcRenderer, remote } = require('electron');
 const path = require('path');
 const $ = require('jquery');
 const moment = require('moment');
+const _  = require('lodash');
 
 
 const Notification = remote.Notification;
@@ -28,7 +29,8 @@ const titleModal = document.querySelector('.add-work__title');
 const addBtnText = document.querySelector('.btn-add-work');
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    const secureList = Object.values(MUC_DO_MAT);
+    let secureList = Object.values(MUC_DO_MAT);
+    let countAddNotification = 1000;
     secureList.shift();
     secureField.innerHTML = `
         <option disabled selected value="">Mức độ mật</option>
@@ -47,13 +49,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
     btnAddNotification.addEventListener('click', () => {
         const formAddNotification = document.querySelector('.form-add-notification');
         const newNode = document.createElement("div");
+        countAddNotification++;
+        // newNode.innerHTML = `
+        //     <div class='d-flex item-add-notification mt-2'>
+        //         <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
+        //         <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+        //         <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
+        //     </div>
+        // `
+
         newNode.innerHTML = `
-            <div class='d-flex item-add-notification mt-2'>
+            <div class='item-add-notification pt-2'>
                 <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' />
-                <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
-                <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
+                <div class="d-flex mt-2 pb-3 border-bottom justify-content-between">
+                    <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off">
+                    <div class='d-flex align-items-center'>
+                        <input type="radio" name="notification-month-${countAddNotification}" value="${MONTH_PRECIOUS.MONTH}" class="" autocomplete="off" autofill="off">
+                        <label class="text-nowrap m-0 ml-3">Hằng tháng</label>
+                    </div>
+                    <div class='d-flex align-items-center'>
+                        <input type="radio" name="notification-month-${countAddNotification}" value="${MONTH_PRECIOUS.PRECIOUS}" class="" autocomplete="off" autofill="off">
+                        <label class="text-nowrap m-0 ml-3">Hằng quý</label>
+                    </div>
+                    <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
+                </div>
             </div>
-        `
+        `;
+        
 
         formAddNotification.appendChild(newNode);
         $(".datepicker").datepicker({
@@ -83,15 +105,32 @@ ipcRenderer.on('item-work', (event, item) => {
         const formAddNotification = document.querySelector('.form-add-notification');
         formAddNotification.innerHTML = ``;
 
-        remind && remind.forEach(item => {
+        const groupRemind = _.groupBy(remind, item => {
+            return item.time.split('/')[0];
+        });
+
+        Object.values(groupRemind).forEach((item, index) => {
+            const firstItem = item[0];
+            const {time, title, repeat} = firstItem || {};
             const newNode = document.createElement("div");
+            
             newNode.innerHTML = `
-                <div class='d-flex item-add-notification mt-2'>
-                    <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' value="${item.title}" />
-                    <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off" value="${item.time}">
+            <div class='item-add-notification'>
+                <input name='content-notification' type='text' placeholder='Nội dung thông báo' class='form-control input-title-notification' value="${title}" />
+                <div class="d-flex mt-2 pb-3 border-bottom justify-content-between">
+                    <input type="text" name="date-notification" class="form-control datepicker input-date-notification" placeholder="Chọn ngày" autocomplete="off" autofill="off" value="${time}">
+                    <div class='d-flex align-items-center'>
+                        <input type="radio" name="notification-month-${index}" value="${MONTH_PRECIOUS.MONTH}" ${repeat === MONTH_PRECIOUS.MONTH ? "checked" : ""} class="" autocomplete="off" autofill="off">
+                        <label class="text-nowrap m-0 ml-3">Hằng tháng</label>
+                    </div>
+                    <div class='d-flex align-items-center'>
+                        <input type="radio" name="notification-month-${index}" value="${MONTH_PRECIOUS.PRECIOUS}" ${repeat === MONTH_PRECIOUS.PRECIOUS ? "checked" : ""} class="" autocomplete="off" autofill="off">
+                        <label class="text-nowrap m-0 ml-3">Hằng quý</label>
+                    </div>
                     <button class='btn btn-sm btn-danger' type='btn' onclick="removeRemind(event)">Xoá</button>
                 </div>
-            `
+            </div>
+        `;
             formAddNotification.appendChild(newNode)
             $(".datepicker").datepicker({
             format: "dd/mm/yyyy",
@@ -116,7 +155,6 @@ ipcRenderer.on('item-work', (event, item) => {
     }
 
     btnAddWork.addEventListener('click', (e) => {
-        console.log(e,'tttt')
         let regexSplitFileNameOnWin = /[^\\]*$/;
         let regexSplitFileNameOnMac = /[^\/]*$/;
         let fileName = fileField.files[0]?.name;
@@ -130,11 +168,54 @@ ipcRenderer.on('item-work', (event, item) => {
         let notificationList = [];
 
         itemAddNotification.forEach(item => {
-            notificationList.push({
-                title: item.children[0].value,
-                time: item.children[1].value
-            })
+            const date = item.children[1].children[0].value;
+            const monthPreciousValue = item.children[1].querySelector("input[type='radio']:checked")?.value;
+            
+            const onlyDate = date.split('/')[0];
+            const allMonths = moment.months();
+            const year = moment().year();
+            const currentMonth = new Date().getMonth();
+            const remainingMonth = allMonths.slice(currentMonth);
+            
+            if (monthPreciousValue === MONTH_PRECIOUS.MONTH) {
+                remainingMonth.forEach(month => {
+                    const monthConvert = moment().month(month).format("MM");
+                    notificationList.push({
+                        title: item.children[0].value,
+                        time: `${onlyDate}/${monthConvert}/${year}`,
+                        repeat: MONTH_PRECIOUS.MONTH
+                    })
+                })
+            } else if (monthPreciousValue === MONTH_PRECIOUS.PRECIOUS) {
+                notificationList = [
+                    ...notificationList,
+                    {
+                        title: item.children[0].value,
+                        time: `${onlyDate}/03/${year}`,
+                        repeat: MONTH_PRECIOUS.PRECIOUS
+                    },
+                    {
+                        title: item.children[0].value,
+                        time: `${onlyDate}/06/${year}`,
+                        repeat: MONTH_PRECIOUS.PRECIOUS
+                    },
+                    {
+                        title: item.children[0].value,
+                        time: `${onlyDate}/09/${year}`,
+                        repeat: MONTH_PRECIOUS.PRECIOUS
+                    }
+                ]
+            } else {
+                notificationList.push({
+                    title: item.children[0].value,
+                    time: date,
+                    repeat: ""
+                })
+            }
+            
         })
+
+        // return
 
         const body = {
             filePath: {
@@ -154,7 +235,7 @@ ipcRenderer.on('item-work', (event, item) => {
             filterText: `${titleField.value.toUpperCase()} ${contentField.value.toUpperCase()} ${searchKeywordField.value.toUpperCase()}`
         }
 
-        // if (!pathContainFile) validateText = 'Chọn file là bắt buộc!';
+       
         if (!body.title) validateText = 'Tên văn bản là bắt buộc!';
         if (!body.content) validateText = 'Nội dung là bắt buộc!';
         if (!body.secure) validateText = 'Độ mật là bắt buộc!';
@@ -193,8 +274,7 @@ ipcRenderer.on('item-work', (event, item) => {
 
 const removeRemind = (e) => {
     e.preventDefault();
-    e.currentTarget.parentNode.remove();
-    // console.log(e)
+    e.currentTarget.parentNode.parentNode.remove();
 }
 
 

@@ -3,7 +3,8 @@
     margin-bottom: 100px;
 }
 
-.add-work input,
+.add-work input[type=text],
+.add-work input[type=file],
 .add-work textarea,
 .add-work select {
     width: 70%;
@@ -25,12 +26,11 @@
 }
 
 .input-title-notification {
-    width: 60%;
+    width: 100% !important;
 }
 
 .input-date-notification {
     width: 40% !important;
-    margin: 0 20px;
 }
 
 .contactName {

@@ -31,6 +31,26 @@
         </div>
         <div class='d-flex align-items-end wrap-filter'> 
           <div class='mr-5'>
+            <label>Nhắc nhở tháng</label>
+            <div class='d-flex align-items-center'>
+              <select name='monthRemind' class='form-control filter-month-remind mr-2 w-auto'>
+                <option disabled selected >Chọn tháng</option>
+                <option value="01">Tháng 1</option>
+                <option value="02">Tháng 2</option>
+                <option value="03">Tháng 3</option>
+                <option value="04">Tháng 4</option>
+                <option value="05">Tháng 5</option>
+                <option value="06">Tháng 6</option>
+                <option value="07">Tháng 7</option>
+                <option value="08">Tháng 8</option>
+                <option value="09">Tháng 9</option>
+                <option value="10">Tháng 10</option>
+                <option value="11">Tháng 11</option>
+                <option value="12">Tháng 12</option>
+              </select>
+            </div>
+          </div>
+          <div class='mr-5'>
             <label>Ngày nhận</label>
             <div class='d-flex align-items-center'>
               <input type="text" name="fromReceiveDate" class="form-control datepicker from-receive-date" placeholder="Từ ngày" autocomplete="off" autofill="off">
@@ -38,9 +58,9 @@
               <input type="text" name="toReceiveDate" class="form-control datepicker to-receive-date" placeholder="Đến ngày" autocomplete="off" autofill="off">
             </div>
           </div>
-          <select name='findName' class='form-control filter-secure mr-2 w-auto'></select>
-          <input name='secure' type='text' class='form-control filter-send-place mr-2' placeholder="Nơi gửi" />
-          <input name='sendPlace' type='text' class='form-control mr-2 min-w-300' id="work-find-input" placeholder="Tìm theo tên, nội dung hoặc từ khoá ..." />
+          <select name='secure' class='form-control filter-secure mr-2 w-auto'></select>
+          <input name='sendPlace' type='text' class='form-control filter-send-place mr-2' placeholder="Nơi gửi" />
+          <input name='findName' type='text' class='form-control mr-2 min-w-300' id="work-find-input" placeholder="Tìm theo tên, nội dung hoặc từ khoá ..." />
           <!-- <input name='receiveDate' type="date" class='form-control filter-receive-date mr-2' /> -->
         </div>
       </div>

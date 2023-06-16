@@ -34,6 +34,9 @@ const todoItemSchema = {
       searchKeyword: {
         type: 'string',
       },
+      monthRemind: {
+        type: 'string',
+      },
       isDone: {
         type: 'boolean',
         default: false
