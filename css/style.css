@@ -20,6 +20,15 @@ ul {
   background: #e8e8e8;
 }
 
+.wrap-filter {
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.wrap-filter>input {
+  margin-top: 12px;
+}
+
 .wrap-filter input,
 .wrap-filter select {
   width: 150px;
